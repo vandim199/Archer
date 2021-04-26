@@ -4,9 +4,12 @@ using GXPEngine;								// GXPEngine contains the engine
 
 public class MyGame : Game
 {
+    public Vec2 gravity = new Vec2(0, 0.98f);
+
 	public MyGame() : base(800, 600, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
         Console.WriteLine("Hello, mate");
+        AddChild(new Player());
     }
 
     void Update()
