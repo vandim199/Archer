@@ -55,10 +55,15 @@ namespace GXPEngine
         {
             if (moving)
             {
-                _oldPosition = position;
-                position += velocity;
+                if (previousCollision != null && currentCollision != null)
+                {
+                    Console.WriteLine(previousCollision.timeOfImpact - currentCollision.timeOfImpact);
+                }
 
                 previousCollision = currentCollision;
+                _oldPosition = position;
+                position += velocity;
+                
                 currentCollision = FindEarliestCollision();
                 if (currentCollision != null)
                 {
@@ -115,7 +120,7 @@ namespace GXPEngine
                     {
                         float d = (line.endPoint - PoI).Dot(lineSegment.Normalized());
 
-                        if (d >= 0 - radius && d <= lineSegment.Length() + radius)
+                        if (d >= 0 - radius/2 && d <= lineSegment.Length() + radius/2)
                         {
                             return new CollisionInfo(lineNormal, line, ToI, PoI);
                         }
@@ -147,6 +152,7 @@ namespace GXPEngine
                 velocity.Reflect(col.normal, bounciness);
 
                 //(realParent as Player).velocity = velocity;
+                //if(col.other.y < position.y)
                 (realParent as Player).grounded = true;
             }
         }

@@ -18,7 +18,7 @@ namespace GXPEngine
         GameObject space;
         Ball lineCap;
 
-        public LineSegment(GameObject newRealParent, float startX, float startY, float endX, float endY, uint newColor = 0xffffffff, byte newLineWeight = 1, bool newGlobal = false, bool newArrow = false, bool side = true):base()
+        public LineSegment(GameObject newRealParent, float startX, float startY, float endX, float endY, uint newColor = 0xffffffff, byte newLineWeight = 1, bool newGlobal = false, bool newArrow = false, bool side = false):base()
         {
             MyGame myGame = ((MyGame)game);
 
