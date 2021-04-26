@@ -12,10 +12,11 @@ public class MyGame : Game
 	public MyGame() : base(800, 600, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
         AddChild(new Player());
-        lines.Add(new LineSegment(this, 0, 400, 400, 400, 0xff00fff, 3, true, false, false));
-        lines.Add(new LineSegment(this, 10, 40, 40, 40, 0xfffffff, 3, false, false, false));
+        lines.Add(new LineSegment(this, 0, 400, 400, 400, 0xffffffff, 3, false, false, false));
+        //lines.Add(new LineSegment(this, 10, 40, 40, 40, 0xffffffff, 3, false, false, false));
 
-        foreach (LineSegment line in lines) Console.WriteLine("line");
+        foreach (LineSegment line in lines) AddChild(line);
+        foreach (Ball ball in balls) AddChild(ball);
     }
 
     void Update()

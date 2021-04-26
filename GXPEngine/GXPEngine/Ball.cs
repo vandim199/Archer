@@ -21,6 +21,11 @@ namespace GXPEngine
         GameObject realParent;
         MyGame myGame;
 
+        float bounciness;
+
+        CollisionInfo currentCollision;
+        CollisionInfo previousCollision;
+
         public float Mass
         {
             get
@@ -30,16 +35,20 @@ namespace GXPEngine
         }
         
 
-        public Ball(GameObject newRealParent, Vec2 newPos, float newRadius = 13, bool newMoving = false):base("Ball.png")
+        public Ball(GameObject newRealParent, Vec2 newPos, float newRadius = 10, float newBounciness = 1, bool newMoving = false):base("Ball.png")
         {
             realParent = newRealParent;
             SetOrigin(width/2, height/2);
             moving = newMoving;
             radius = newRadius;
             position = newPos;
+            bounciness = newBounciness;
+            previousCollision = new CollisionInfo(new Vec2(), this, 2);
 
             if (radius == 0) visible = false;
             myGame = ((MyGame)game);
+
+            scale = radius / 10;
         }
 
         void Update()
@@ -49,11 +58,17 @@ namespace GXPEngine
                 _oldPosition = position;
                 position += velocity;
 
-                CollisionInfo firstCollision = FindEarliestCollision();
-                if (firstCollision != null)
+                previousCollision = currentCollision;
+                currentCollision = FindEarliestCollision();
+                if (currentCollision != null)
                 {
-                    ResolveCollision(firstCollision);
+                    if (previousCollision == null || currentCollision.timeOfImpact < previousCollision.timeOfImpact)
+                    {
+                        ResolveCollision(currentCollision);
+                    }
+                    else ResolveCollision(previousCollision);
                 }
+                else (realParent as Player).grounded = false;
             }
             x = position.x;
             y = position.y;
@@ -100,7 +115,7 @@ namespace GXPEngine
                     {
                         float d = (line.endPoint - PoI).Dot(lineSegment.Normalized());
 
-                        if (d >= 0 && d <= lineSegment.Length())
+                        if (d >= 0 - radius && d <= lineSegment.Length() + radius)
                         {
                             return new CollisionInfo(lineNormal, line, ToI, PoI);
                         }
@@ -117,8 +132,11 @@ namespace GXPEngine
             {
                 Ball otherBall = (Ball)col.other;
 
-                velocity.Reflect(col.normal);
+                velocity.Reflect(col.normal, bounciness);
                 position += col.pointOfImpact;
+
+                //(realParent as Player).velocity = velocity;
+                (realParent as Player).grounded = true;
             }
 
             if (col.other is LineSegment)
@@ -126,7 +144,10 @@ namespace GXPEngine
                 LineSegment line = (LineSegment)col.other;
                 
                 position = col.pointOfImpact;
-                velocity.Reflect(col.normal);
+                velocity.Reflect(col.normal, bounciness);
+
+                //(realParent as Player).velocity = velocity;
+                (realParent as Player).grounded = true;
             }
         }
     }
