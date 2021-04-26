@@ -17,6 +17,8 @@ namespace GXPEngine
         {
             myGame = ((MyGame)game);
             scale = 0.5f;
+
+            myGame.lines.Add(new LineSegment(this, 0, 0, width, height));
         }
 
         void Update()
