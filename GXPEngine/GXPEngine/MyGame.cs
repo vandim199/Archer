@@ -13,12 +13,12 @@ public class MyGame : Game
 	{
         AddChild(new Player());
         //lines.Add(new LineSegment(this, 0, 0, width, 0));
-        lines.Add(new LineSegment(this, 0, 0, 0, height));
+        lines.Add(new LineSegment(this, 0, 500, 0, 0));
         lines.Add(new LineSegment(this, width, 0, width, height));
-        lines.Add(new LineSegment(this, 0, 450, 300, 500));
+        lines.Add(new LineSegment(this, 300, 500, 0, 500));
         lines.Add(new LineSegment(this, 300, 600, 300, 500));
-        lines.Add(new LineSegment(this, 800, 500, 600, 500));
-        lines.Add(new LineSegment(this, 600, 600, 600, 500));
+        lines.Add(new LineSegment(this, 800, 500, 500, 500));
+        lines.Add(new LineSegment(this, 500, 500, 500, 600));
 
         foreach (LineSegment line in lines) AddChild(line);
         foreach (Ball ball in balls) AddChild(ball);
