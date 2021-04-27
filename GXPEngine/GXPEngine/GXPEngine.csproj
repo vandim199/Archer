@@ -87,6 +87,7 @@
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Projectile.cs" />
+    <Compile Include="Box.cs" />
     <Compile Include="Vec2.cs" />
   </ItemGroup>
 </Project>

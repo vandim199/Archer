@@ -55,10 +55,15 @@ namespace GXPEngine
         {
             if (moving)
             {
-                _oldPosition = position;
-                position += velocity;
+                if (previousCollision != null && currentCollision != null)
+                {
+                    Console.WriteLine(previousCollision.timeOfImpact - currentCollision.timeOfImpact);
+                }
 
                 previousCollision = currentCollision;
+                _oldPosition = position;
+                position += velocity;
+                
                 currentCollision = FindEarliestCollision();
                 if (currentCollision != null)
                 {
@@ -88,55 +93,87 @@ namespace GXPEngine
                     Vec2 relativePosition = position - ball.position;
                     if (relativePosition.Length() < radius + ball.radius)
                     {
-                        float distance = relativePosition.Length();
-                        float overlap = radius + ball.radius - distance;
-                        Vec2 PoI = relativePosition.Normalized() * overlap;
-                        return new CollisionInfo(relativePosition.Normalized(), ball, 0, PoI);
+                        Vec2 ballNormal = relativePosition.Normalized();
+
+                        float a = Mathf.Abs(Mathf.Pow(velocity.Length(), 2));
+                        float b = 2 * ballNormal.Dot(velocity);
+                        float c = Mathf.Abs(Mathf.Pow(ballNormal.Length(), 2)) - Mathf.Pow((radius + ball.radius), 2);
+
+                        if (Mathf.Abs(a) < 0.001f) return null;
+                        float D = b * b - 4 * a * c;
+                        if (D < 0) return null;
+
+                        float ToI = -b - Mathf.Sqrt(D) / (2 * a);
+
+                        if (ToI >= 0)
+                        {
+                            Vec2 PoI = position + velocity * ToI;
+                            float distance = relativePosition.Length();
+                            float overlap = radius + ball.radius - distance;
+                            //Vec2 PoI = relativePosition.Normalized() * overlap;
+                            return new CollisionInfo(ballNormal, ball, ToI, PoI);
+                        }
                     }
                 }
             }
             
             for (int i = 0; i < myGame.lines.Count; i++)
             {
-                oldDifferenceVec = differenceVec;
+                //oldDifferenceVec = differenceVec;
 
                 LineSegment line = myGame.lines[i];
                 Vec2 lineSegment = (line.endPoint - line.startPoint);
                 Vec2 lineNormal = lineSegment.Normal();
+                oldDifferenceVec = _oldPosition - line.startPoint;
                 differenceVec = position - line.endPoint;
                 float ballDistance = differenceVec.Dot(lineNormal);
 
-                if (ballDistance < radius)
+                //if (ballDistance < radius)
                 {
-                    Vec2 PoI = (-ballDistance + radius) * lineNormal + position;
+                    //Vec2 PoI = (-ballDistance + radius) * lineNormal + position;
 
-                    Vec2 a = PoI - _oldPosition;
+                    float a = lineNormal.Dot(oldDifferenceVec) - radius;
+                    float b = -(lineNormal.Dot(velocity));
 
-                    float ToI = a.Length() / velocity.Length();
+                    if (b <= 0) continue;
+                    if (a < 0) continue;
+
+                    //Vec2 a = PoI - _oldPosition;
+
+                    float ToI;
+                    if (a >= 0)
+                    ToI = a / b;
+
+                    else if (a >= -radius)
+                    ToI = 0;
+
+                    else return null;
 
                     if (Mathf.Abs(ToI) <= 1)
                     {
+                        Vec2 PoI = _oldPosition + velocity * ToI;
                         float d = (line.endPoint - PoI).Dot(lineSegment.Normalized());
 
-                        if (d >= 0 - radius && d <= lineSegment.Length() + radius)
+                        if (d >= 0 && d <= lineSegment.Length())
                         {
                             return new CollisionInfo(lineNormal, line, ToI, PoI);
                         }
                     }
                 }
             }
-
             return null;
         }
 
         void ResolveCollision(CollisionInfo col)
         {
+            bool firstTime = true;
+
             if (col.other is Ball)
             {
                 Ball otherBall = (Ball)col.other;
 
                 velocity.Reflect(col.normal, bounciness);
-                position += col.pointOfImpact;
+                position = col.pointOfImpact;
 
                 //(realParent as Player).velocity = velocity;
                 if (realParent is Player player)
@@ -151,6 +188,12 @@ namespace GXPEngine
                 
                 position = col.pointOfImpact;
                 velocity.Reflect(col.normal, bounciness);
+
+                if (Mathf.Abs(col.timeOfImpact) <= 0.0001)
+                {
+                    firstTime = false;
+                    position += velocity;
+                }
 
                 //(realParent as Player).velocity = velocity;
                 if (realParent is Player player)
