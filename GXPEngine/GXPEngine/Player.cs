@@ -10,7 +10,7 @@ namespace GXPEngine
         MyGame myGame;
         public Vec2 position;
         //public Vec2 velocity;
-        int speed = 6;
+        int speed = 7;
         int combinedInputs;
 
         Ball newBall;
@@ -30,7 +30,7 @@ namespace GXPEngine
             //myGame.lines.Add(new LineSegment(this, 0, 0, 0, height * 2));
 
             newBall = new Ball(this, position + new Vec2(0, 15), 50, 0.1f, true);
-            //newBall.visible = false;
+            newBall.visible = false;
             //myGame.AddChild(newBall);
             myGame.balls.Add(newBall);
         }

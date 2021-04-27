@@ -163,6 +163,8 @@ namespace GXPEngine
 
         void ResolveCollision(CollisionInfo col)
         {
+            bool firstTime = true;
+
             if (col.other is Ball)
             {
                 Ball otherBall = (Ball)col.other;
@@ -180,6 +182,12 @@ namespace GXPEngine
                 
                 position = col.pointOfImpact;
                 velocity.Reflect(col.normal, bounciness);
+
+                if (Mathf.Abs(col.timeOfImpact) <= 0.0001)
+                {
+                    firstTime = false;
+                    position += velocity;
+                }
 
                 //(realParent as Player).velocity = velocity;
                 //if(col.other.y < position.y)
