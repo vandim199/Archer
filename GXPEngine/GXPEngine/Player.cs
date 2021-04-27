@@ -15,6 +15,10 @@ namespace GXPEngine
 
         Ball newBall;
 
+        private Vec2 startAimPosition;
+        private bool isAiming;
+        private float aimSensitivity = 10;
+
         public bool grounded = false;
 
         public Player():base("character_maleAdventurer_sheetHD.png", 9, 5)
@@ -44,6 +48,20 @@ namespace GXPEngine
             Animate();
             Movement();
             UpdateScreenPosition();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                StartAiming();
+            }
+            else if (Input.GetMouseButtonUp(0))
+            {
+                Shoot();
+            }
+
+            if (isAiming)
+            {
+                Aim();
+            }
         }
 
         void Movement()
@@ -69,6 +87,30 @@ namespace GXPEngine
 
             Console.WriteLine(velocity.y);
             Mathf.Clamp(velocity.y, -1000, myGame.gravity.y);
+        }
+
+        private void StartAiming()
+        {
+            startAimPosition = new Vec2(Input.mouseX, Input.mouseY);
+            isAiming = true;
+        }
+
+        private void Aim()
+        {
+            Vec2 mousePosition = new Vec2(Input.mouseX, Input.mouseY);
+            Gizmos.DrawLine(startAimPosition.x, startAimPosition.y, mousePosition.x, mousePosition.y, color: 0xffffffff, width: 5);
+        }
+
+        private void Shoot()
+        {
+            isAiming = false;
+            Vec2 mousePosition = new Vec2(Input.mouseX, Input.mouseY);
+
+            Vec2 relativeMousePosition = startAimPosition - mousePosition;
+
+            Vec2 spawnPosition = position + (relativeMousePosition.Normalized() * 100);
+
+            myGame.AddChild(new Projectile(myGame, relativeMousePosition / aimSensitivity, spawnPosition));
         }
 
         void UpdateScreenPosition()

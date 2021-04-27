@@ -68,7 +68,10 @@ namespace GXPEngine
                     }
                     else ResolveCollision(previousCollision);
                 }
-                else (realParent as Player).grounded = false;
+                else if (realParent is Player player)
+                {
+                    player.grounded = false;
+                }
             }
             x = position.x;
             y = position.y;
@@ -136,7 +139,10 @@ namespace GXPEngine
                 position += col.pointOfImpact;
 
                 //(realParent as Player).velocity = velocity;
-                (realParent as Player).grounded = true;
+                if (realParent is Player player)
+                {
+                    player.grounded = true;
+                }
             }
 
             if (col.other is LineSegment)
@@ -147,7 +153,10 @@ namespace GXPEngine
                 velocity.Reflect(col.normal, bounciness);
 
                 //(realParent as Player).velocity = velocity;
-                (realParent as Player).grounded = true;
+                if (realParent is Player player)
+                {
+                    player.grounded = true;
+                }
             }
         }
     }

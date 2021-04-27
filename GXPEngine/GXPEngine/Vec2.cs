@@ -212,4 +212,16 @@ public struct Vec2
     {
         this = this - (1 + pBounciness) * (this.Dot(pNormal)) * pNormal;
     }
+
+    public Vec2 Reflected(float bounciness, Vec2 reflector)
+    {
+        Vec2 reflected = this - (1 + bounciness) * (Dot(reflector)) * reflector;
+        return reflected;
+
+    }
+
+    public Vec2 VectorTo(Vec2 destination)
+    {
+        return (destination - this);
+    }
 }
