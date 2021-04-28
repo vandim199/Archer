@@ -26,6 +26,8 @@ namespace GXPEngine
         CollisionInfo currentCollision;
         CollisionInfo previousCollision;
 
+        public bool firstTime = true;
+
         public float Mass
         {
             get
@@ -55,11 +57,6 @@ namespace GXPEngine
         {
             if (moving)
             {
-                if (previousCollision != null && currentCollision != null)
-                {
-                    Console.WriteLine(previousCollision.timeOfImpact - currentCollision.timeOfImpact);
-                }
-
                 previousCollision = currentCollision;
                 _oldPosition = position;
                 position += velocity;
@@ -67,11 +64,11 @@ namespace GXPEngine
                 currentCollision = FindEarliestCollision();
                 if (currentCollision != null)
                 {
-                    if (previousCollision == null || currentCollision.timeOfImpact < previousCollision.timeOfImpact)
+                    //if (previousCollision == null || currentCollision.timeOfImpact < previousCollision.timeOfImpact)
                     {
                         ResolveCollision(currentCollision);
                     }
-                    else ResolveCollision(previousCollision);
+                    //else ResolveCollision(previousCollision);
                 }
                 else if (realParent is Player player)
                 {
@@ -85,33 +82,35 @@ namespace GXPEngine
         CollisionInfo FindEarliestCollision()
         {
             //for (int i = 0; i < myGame.balls.Count; i++)
-            foreach(Ball ball in myGame.balls)
+            foreach(Ball other in myGame.balls)
             {
                 //Ball ball = myGame.balls[i];
-                if (ball != this)
+                if (other != this)
                 {
-                    Vec2 relativePosition = position - ball.position;
-                    if (relativePosition.Length() < radius + ball.radius)
+                    Vec2 relativePosition = position - other.position;
+                    if (relativePosition.Length() < radius + other.radius)
                     {
                         Vec2 ballNormal = relativePosition.Normalized();
 
-                        float a = Mathf.Abs(Mathf.Pow(velocity.Length(), 2));
-                        float b = 2 * ballNormal.Dot(velocity);
-                        float c = Mathf.Abs(Mathf.Pow(ballNormal.Length(), 2)) - Mathf.Pow((radius + ball.radius), 2);
+                        Vec2 u = position - other.position;
+
+                        float a = velocity.Length() * velocity.Length();
+                        float b = (2 * u).Dot(velocity);
+                        float c = u.Length() * u.Length() - (radius + other.radius) * (radius + other.radius);
 
                         if (Mathf.Abs(a) < 0.001f) return null;
-                        float D = b * b - 4 * a * c;
+                        float D = (b * b) - (4 * a * c);
                         if (D < 0) return null;
 
-                        float ToI = -b - Mathf.Sqrt(D) / (2 * a);
+                        float ToI = (-b - Mathf.Sqrt(D)) / (2 * a);
 
-                        if (ToI >= 0)
+                        if (Mathf.Abs(ToI) >= 0 && Mathf.Abs(ToI) < 1)
                         {
-                            Vec2 PoI = position + velocity * ToI;
+                            Vec2 PoI = _oldPosition + (velocity * ToI);
                             float distance = relativePosition.Length();
-                            float overlap = radius + ball.radius - distance;
+                            float overlap = radius + other.radius - distance;
                             //Vec2 PoI = relativePosition.Normalized() * overlap;
-                            return new CollisionInfo(ballNormal, ball, ToI, PoI);
+                            return new CollisionInfo(relativePosition.Normalized(), other, ToI, PoI);
                         }
                     }
                 }
@@ -166,8 +165,6 @@ namespace GXPEngine
 
         void ResolveCollision(CollisionInfo col)
         {
-            bool firstTime = true;
-
             if (col.other is Ball)
             {
                 Ball otherBall = (Ball)col.other;
@@ -189,14 +186,13 @@ namespace GXPEngine
                 position = col.pointOfImpact;
                 velocity.Reflect(col.normal, bounciness);
 
-                if (Mathf.Abs(col.timeOfImpact) <= 0.0001)
+                if (Mathf.Abs(col.timeOfImpact) <= 0.001 && line.floor)
                 {
-                    firstTime = false;
                     position += velocity;
                 }
 
                 //(realParent as Player).velocity = velocity;
-                if (realParent is Player player)
+                if (realParent is Player player && line.floor)
                 {
                     player.grounded = true;
                 }

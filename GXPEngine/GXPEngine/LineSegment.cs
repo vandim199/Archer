@@ -13,12 +13,14 @@ namespace GXPEngine
         bool arrow;
         uint color;
         byte lineWeight;
+        public bool floor;
 
         public GameObject realParent;
         GameObject space;
         Ball lineCap;
-
-        public LineSegment(GameObject newRealParent, float startX, float startY, float endX, float endY, uint newColor = 0xffffffff, byte newLineWeight = 1, bool newGlobal = false, bool newArrow = false, bool side = true):base()
+        
+        public LineSegment(GameObject newRealParent, float startX, float startY, float endX, float endY, uint newColor = 0xffffffff, byte newLineWeight = 1,
+            bool newGlobal = false, bool newArrow = false, bool side = true, bool newFloor = false):base()
         {
             MyGame myGame = ((MyGame)game);
 
@@ -27,6 +29,7 @@ namespace GXPEngine
             arrow = newArrow;
             color = newColor;
             lineWeight = newLineWeight;
+            floor = newFloor;
 
             startPoint.SetXY(startX, startY);
             endPoint.SetXY(endX, endY);
@@ -34,13 +37,13 @@ namespace GXPEngine
             if (!global) space = realParent;
             else space = null;
 
-            /*lineCap = new Ball(realParent, startPoint, 0);
+            lineCap = new Ball(realParent, startPoint, 0);
             if (realParent != myGame) realParent.AddChild(lineCap);
             myGame.balls.Add(lineCap);
 
             lineCap = new Ball(realParent, endPoint, 0);
             if (realParent != myGame) realParent.AddChild(lineCap);
-            myGame.balls.Add(lineCap);*/
+            myGame.balls.Add(lineCap);
 
             if (!side) myGame.lines.Add(new LineSegment(newRealParent ,endPoint.x, endPoint.y, startPoint.x, startPoint.y, color, 0, global, false, true));
         }

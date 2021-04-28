@@ -9,16 +9,25 @@ public class MyGame : Game
     public List<Ball> balls = new List<Ball>();
     public List<LineSegment> lines = new List<LineSegment>();
 
+    ColliderManager colliderManager = new ColliderManager();
+    Player player;
+
 	public MyGame() : base(800, 600, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
-        AddChild(new Player());
+        player = new Player();
+        AddChild(player);
         //lines.Add(new LineSegment(this, 0, 0, width, 0));
         lines.Add(new LineSegment(this, 0, 500, 0, 0));
         lines.Add(new LineSegment(this, width, 0, width, height));
-        lines.Add(new LineSegment(this, 300, 500, 0, 500));
+        lines.Add(new LineSegment(this, 300, 500, 0, 500, newFloor:true));
         lines.Add(new LineSegment(this, 300, 600, 300, 500));
-        lines.Add(new LineSegment(this, 800, 500, 500, 500));
+        lines.Add(new LineSegment(this, 800, 500, 500, 500, newFloor:true));
         lines.Add(new LineSegment(this, 500, 500, 500, 600));
+
+        //lines.Add(new LineSegment(this, 150, 450, 0, 400));
+        //lines.Add(new LineSegment(this, 300, 400, 150, 450));
+
+        //AddChild(new LineCollider(new Vec2(300, 500), new Vec2(0, 500), newLineWidth: 1));
 
         foreach (LineSegment line in lines) AddChild(line);
         foreach (Ball ball in balls) AddChild(ball);
@@ -27,7 +36,7 @@ public class MyGame : Game
     void Update()
 	{
 
-	}
+    }
 
 	static void Main()							// Main() is the first method that's called when the program is run
 	{
