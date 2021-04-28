@@ -123,8 +123,8 @@ namespace GXPEngine
                 LineSegment line = myGame.lines[i];
                 Vec2 lineSegment = (line.endPoint - line.startPoint);
                 Vec2 lineNormal = lineSegment.Normal();
-                oldDifferenceVec = _oldPosition - line.endPoint;
-                differenceVec = position - line.endPoint;
+                oldDifferenceVec = _oldPosition - line.startPoint;
+                differenceVec = position - line.startPoint;
                 float ballDistance = differenceVec.Dot(lineNormal);
 
                 //if (ballDistance < radius)
@@ -145,12 +145,12 @@ namespace GXPEngine
 
                     else if (a >= -radius)
                     ToI = 0;
-
-                    else return null;
+                    
+                    else continue;
 
                     if (Mathf.Abs(ToI) <= 1)
                     {
-                        Vec2 PoI = _oldPosition + velocity * ToI;
+                        Vec2 PoI = _oldPosition + (velocity * ToI);
                         float d = (line.endPoint - PoI).Dot(lineSegment.Normalized());
 
                         if (d >= 0 && d <= lineSegment.Length())
@@ -182,11 +182,11 @@ namespace GXPEngine
             if (col.other is LineSegment)
             {
                 LineSegment line = (LineSegment)col.other;
-                
-                position = col.pointOfImpact;
-                velocity.Reflect(col.normal, bounciness);
 
-                if (Mathf.Abs(col.timeOfImpact) <= 0.001 && line.floor)
+                velocity.Reflect(col.normal, bounciness);
+                position = col.pointOfImpact;
+
+                //if (Mathf.Abs(col.timeOfImpact) <= 0.001 && line.floor)
                 {
                     position += velocity;
                 }

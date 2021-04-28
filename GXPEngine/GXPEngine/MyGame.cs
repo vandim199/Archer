@@ -23,15 +23,16 @@ public class MyGame : Game
         player.AddChild(cam);
 
         //lines.Add(new LineSegment(this, 0, 0, width, 0));
-        lines.Add(new LineSegment(this, 0, 500, 0, 0));
+        lines.Add(new LineSegment(this, 0, 510, 0, 0));
         lines.Add(new LineSegment(this, width, 0, width, height));
-        lines.Add(new LineSegment(this, 300, 500, 0, 500, newFloor:true));
+        lines.Add(new LineSegment(this, 300, 500, -10, 500, newFloor:true));
         lines.Add(new LineSegment(this, 300, 600, 300, 500));
-        lines.Add(new LineSegment(this, 800, 500, 500, 500, newFloor:true));
+        lines.Add(new LineSegment(this, 850, 500, 500, 500, newFloor:true));
         lines.Add(new LineSegment(this, 500, 500, 500, 600));
         lines.Add(new LineSegment(this, 800, 1000, 0, 1000, newFloor: true));
         
-        lines.Add(new LineSegment(this, 1200, 450, 800, 500, newFloor:true));
+        lines.Add(new LineSegment(this, 1200, 420, 800, 510, newFloor:true));
+        //lines.Add(new LineSegment(this, 400, 450, 0, 400, newFloor: true));
 
         //AddChild(new LineCollider(new Vec2(300, 500), new Vec2(0, 500), newLineWidth: 1));
 

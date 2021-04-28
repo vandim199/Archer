@@ -30,7 +30,7 @@ namespace GXPEngine
             scale = 0.5f;
             position.SetXY(60, 60);
 
-            newBall = new Ball(this, position + new Vec2(0, 15), 50, 0, true);
+            newBall = new Ball(this, position + new Vec2(0, 15), 50, 0.1f, true);
             newBall.visible = false;
             myGame.AddChild(newBall);
         }
@@ -63,10 +63,10 @@ namespace GXPEngine
 
             if (Input.GetKey(Key.A)) newBall.velocity.x = -speed;
             else if (Input.GetKey(Key.D)) newBall.velocity.x = speed;
-            else newBall.velocity.x *= 0.95f;
+            else newBall.velocity.x *= 0.90f;
 
-            if ((Input.GetKey(Key.W) || Input.GetKey(Key.SPACE)) && grounded) newBall.velocity.y = -20;
-            else newBall.velocity.y *= 0.95f;
+            if ((Input.GetKey(Key.W) || Input.GetKey(Key.SPACE)) && grounded) newBall.velocity.y = -40;
+            else newBall.velocity.y *= 0.90f;
             
             if (combinedInputs == 0) SetCycle(0, 1);
             else SetCycle(24, 4);
