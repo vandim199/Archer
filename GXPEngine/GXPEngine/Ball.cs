@@ -123,7 +123,7 @@ namespace GXPEngine
                 LineSegment line = myGame.lines[i];
                 Vec2 lineSegment = (line.endPoint - line.startPoint);
                 Vec2 lineNormal = lineSegment.Normal();
-                oldDifferenceVec = _oldPosition - line.startPoint;
+                oldDifferenceVec = _oldPosition - line.endPoint;
                 differenceVec = position - line.endPoint;
                 float ballDistance = differenceVec.Dot(lineNormal);
 

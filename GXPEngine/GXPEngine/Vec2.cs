@@ -131,6 +131,15 @@ public struct Vec2
         this += rotationPoint;
     }
 
+    public void SetAngleAroundDegrees(float degrees, Vec2 rotationPoint)
+    {
+        this -= rotationPoint;
+
+        SetAngleDegrees(degrees);
+
+        this += rotationPoint;
+    }
+
     public void RotateAroundRadians(float radians, Vec2 rotationPoint)
     {
         this -= rotationPoint;

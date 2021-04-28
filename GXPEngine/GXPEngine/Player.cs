@@ -37,11 +37,7 @@ namespace GXPEngine
 
         void Update()
         {
-            Console.WriteLine(grounded);
-            if (Input.GetKeyDown(Key.R) || position.y > game.height) newBall.position.SetXY(60, 60);
-            
-            //velocity = newBall.velocity;
-            //Animate();
+            Animate();
             Movement();
             UpdateScreenPosition();
 
@@ -62,14 +58,14 @@ namespace GXPEngine
 
         void Movement()
         {
+            if (Input.GetKeyDown(Key.R) || position.y > 2000) newBall.position.SetXY(60, 60);
             combinedInputs = (Input.GetKey(Key.A) ? 1 : 0) + (Input.GetKey(Key.D) ? 1 : 0) + (Input.GetKey(Key.W) ? 1 : 0);
 
             if (Input.GetKey(Key.A)) newBall.velocity.x = -speed;
             else if (Input.GetKey(Key.D)) newBall.velocity.x = speed;
             else newBall.velocity.x *= 0.95f;
 
-            if (Input.GetKey(Key.W) && grounded) newBall.velocity.y = -20;
-            else if (Input.GetKey(Key.S)) newBall.velocity.y = speed;
+            if ((Input.GetKey(Key.W) || Input.GetKey(Key.SPACE)) && grounded) newBall.velocity.y = -20;
             else newBall.velocity.y *= 0.95f;
             
             if (combinedInputs == 0) SetCycle(0, 1);
