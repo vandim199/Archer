@@ -30,7 +30,7 @@ namespace GXPEngine
 
             _myGame = myGame;
 
-            _collider = new Ball(this, startingPosition, width / 2f, 0, true);
+            _collider = new Ball(this, startingPosition, width / 2f, 0.5f, true);
             _collider.velocity = startingVelocity;
 
             _myGame.AddChild(_collider);

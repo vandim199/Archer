@@ -9,7 +9,7 @@ namespace GXPEngine
     {
         MyGame myGame;
         public Vec2 position;
-        //public Vec2 velocity;
+        public Vec2 velocity;
         int speed = 7;
         int combinedInputs;
 
@@ -21,29 +21,22 @@ namespace GXPEngine
 
         public bool grounded = false;
 
-        public Player():base("character_maleAdventurer_sheetHD.png", 9, 5)
+        //CircleCollider newBall;
+
+        public Player():base("character_placeholder.png", 9, 5)
         {
             myGame = ((MyGame)game);
             SetOrigin(width / 2, height / 2);
             scale = 0.5f;
             position.SetXY(60, 60);
 
-            //myGame.lines.Add(new LineSegment(this, 0, height * 2, width * 2, height * 2));
-            //myGame.lines.Add(new LineSegment(this, width * 2, height * 2, width * 2, 0));
-            //myGame.lines.Add(new LineSegment(this, width*2, 0, 0, 0));
-            //myGame.lines.Add(new LineSegment(this, 0, 0, 0, height * 2));
-
             newBall = new Ball(this, position + new Vec2(0, 15), 50, 0.1f, true);
             newBall.visible = false;
-            //myGame.AddChild(newBall);
-            myGame.balls.Add(newBall);
+            myGame.AddChild(newBall);
         }
 
         void Update()
         {
-            if (Input.GetKeyDown(Key.R) || position.y > game.height) newBall.position.SetXY(60, 60);
-            position = newBall.position - new Vec2(0, 15);
-            //velocity = newBall.velocity;
             Animate();
             Movement();
             UpdateScreenPosition();
@@ -65,26 +58,25 @@ namespace GXPEngine
 
         void Movement()
         {
+            if (Input.GetKeyDown(Key.R) || position.y > 2000) newBall.position.SetXY(60, 60);
             combinedInputs = (Input.GetKey(Key.A) ? 1 : 0) + (Input.GetKey(Key.D) ? 1 : 0) + (Input.GetKey(Key.W) ? 1 : 0);
 
             if (Input.GetKey(Key.A)) newBall.velocity.x = -speed;
             else if (Input.GetKey(Key.D)) newBall.velocity.x = speed;
-            else newBall.velocity.x *= 0.95f;
+            else newBall.velocity.x *= 0.90f;
 
-            if (Input.GetKeyDown(Key.W)) newBall.velocity.y = -20;
-            else if (Input.GetKey(Key.S)) newBall.velocity.y = speed;
-            else newBall.velocity.y *= 0.95f;
-
-            //if (combinedInputs > 1) velocity = velocity.Normalized() * speed;
+            if ((Input.GetKey(Key.W) || Input.GetKey(Key.SPACE)) && grounded) newBall.velocity.y = -40;
+            else newBall.velocity.y *= 0.90f;
+            
             if (combinedInputs == 0) SetCycle(0, 1);
             else SetCycle(24, 4);
 
             if (newBall.velocity.x < 0) Mirror(true, false);
             else Mirror(false, false);
 
-            //if(!grounded)
+            if(!grounded)
             newBall.velocity += myGame.gravity;
-            //position += velocity;
+            position = newBall.position - new Vec2(0, 15);
         }
 
         private void StartAiming()
