@@ -5,9 +5,10 @@ using GXPEngine;								// GXPEngine contains the engine
 
 public class MyGame : Game
 {
-    public Vec2 gravity = new Vec2(0, 0.98f);
+    public Vec2 gravity = new Vec2(0, 0.1f);
     public List<Ball> balls = new List<Ball>();
     public List<LineSegment> lines = new List<LineSegment>();
+    PhysicsManager physicsManager;
     Camera cam;
 
     ColliderManager colliderManager = new ColliderManager();
@@ -75,7 +76,44 @@ public class MyGame : Game
 
         //AddChild(new Box());
 
+        physicsManager = new PhysicsManager(this);
+
+        PhysicsBody obj = new PhysicsBody(1);
+        obj.AddPoint(new Vec2(300, 100), false);
+        obj.AddPoint(new Vec2(400, 200), false);
+        obj.AddPoint(new Vec2(400, 250), false);
+        obj.AddPoint(new Vec2(300, 150), false);
+        physicsManager.AddPhysicsBody(obj);
+        AddChild(obj);
+
+        PhysicsBody obj2 = new PhysicsBody(0.1f);
+        obj2.AddPoint(new Vec2(250, 400), true);
+        obj2.AddPoint(new Vec2(450, 350), true);
+        obj2.AddPoint(new Vec2(450, 400), true);
+        obj2.AddPoint(new Vec2(250, 450), true);
+        physicsManager.AddPhysicsBody(obj2);
+        AddChild(obj2);
+
         foreach (LineSegment line in lines) AddChild(line);
         foreach (Ball ball in balls) AddChild(ball);
     }
+
+
+    void Update()
+	{
+        physicsManager.Step();
+        if (Input.GetKey(Key.ZERO) && cam.scale >= 0.6f)
+        {
+            cam.scale -= 0.2f;
+        }
+        if (Input.GetKey(Key.NINE) && cam.scale <= 3)
+        {
+            cam.scale += 0.2f;
+        }
+    }
+
+	static void Main()							// Main() is the first method that's called when the program is run
+	{
+		new MyGame().Start();					// Create a "MyGame" and start it
+	}
 }
