@@ -58,7 +58,7 @@ namespace GXPEngine
 
         void Movement()
         {
-            if (Input.GetKeyDown(Key.R) || position.y > 2000) newBall.position.SetXY(60, 60);
+            if (Input.GetKeyDown(Key.R) || position.y > 2000) newBall.position.SetXY(60, -100);
             combinedInputs = (Input.GetKey(Key.A) ? 1 : 0) + (Input.GetKey(Key.D) ? 1 : 0) + (Input.GetKey(Key.W) ? 1 : 0);
 
             if (Input.GetKey(Key.A)) newBall.velocity.x = -speed;
