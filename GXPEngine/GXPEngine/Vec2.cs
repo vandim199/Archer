@@ -224,4 +224,14 @@ public struct Vec2
     {
         return (destination - this);
     }
+
+    /// <summary>
+    /// Inverses a vector
+    /// </summary>
+    /// <param name="vec">The vector to inverse</param>
+    /// <returns></returns>
+    public static Vec2 operator -(Vec2 vec)
+    {
+        return new Vec2(-vec.x, -vec.y);
+    }
 }
