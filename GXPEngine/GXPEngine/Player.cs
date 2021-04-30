@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,8 +28,8 @@ namespace GXPEngine
         {
             myGame = ((MyGame)game);
             SetOrigin(width / 2, height / 2);
-            scale = 1f;
-            position.SetXY(60, 60);
+            scale = 0.5f;
+            position.SetXY(60, 434);
 
             newBall = new Ball(this, position + new Vec2(0, 15), 50, 0.1f, true);
             newBall.visible = false;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GXPEngine;
+using GXPEngine.Core;
 
 class Connection : GameObject
 {
@@ -22,11 +23,11 @@ class Connection : GameObject
 
     void Update()
     {
-        //Gizmos.DrawLine(point1.x, point1.y, point2.x, point2.y, color: 0xffffffff, width: 1);
+        //Gizmos.DrawLine(point1.x, point1.y, point2.x, point2.y, game, color: 0xffffffff, width: 1);
     }
 
-    protected override void RenderSelf(GXPEngine.Core.GLContext glContext)
+    protected override void RenderSelf(GLContext glContext)
     {
-        Gizmos.RenderLine(point1.x, point1.y, point2.x, point2.y, 0xffffffff, 1);
+        Gizmos.RenderLine(point1.x, point1.y, point2.x, point2.y, 0xffffffff, 2);
     }
 }

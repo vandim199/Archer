@@ -19,10 +19,10 @@ class Point : Sprite
             y = value.y;
         }
     }
-    public Vec2 velocity;
     private PhysicsBody _physicsParent;
     private MyGame _myGame;
     public bool isSolid;
+    public bool isColliding;
 
     public Point(MyGame myGame, Vec2 startingPosition, PhysicsBody physicsParent, bool beSolid = false) : base("circle.png", false, false)
     {
@@ -37,7 +37,6 @@ class Point : Sprite
 
         position = startingPosition;
         oldPosition = position;
-        velocity = position - oldPosition;
     }
 
     public void Move()
@@ -45,8 +44,11 @@ class Point : Sprite
         if (!isSolid)
         {
             Vec2 temp = position;
-            position += position - oldPosition + (_myGame.gravity * _physicsParent.mass);
+            Vec2 velocity = position - oldPosition + (_myGame.gravity / _physicsParent.mass);
+
+            position += velocity * _myGame.friction;
             oldPosition = temp;
         }
+        isColliding = false;
     }
 }
