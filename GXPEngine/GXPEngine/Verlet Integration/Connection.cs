@@ -22,6 +22,11 @@ class Connection : GameObject
 
     void Update()
     {
-        Gizmos.DrawLine(point1.x, point1.y, point2.x, point2.y, color: 0xffffffff, width: 1);
+        //Gizmos.DrawLine(point1.x, point1.y, point2.x, point2.y, color: 0xffffffff, width: 1);
+    }
+
+    protected override void RenderSelf(GXPEngine.Core.GLContext glContext)
+    {
+        Gizmos.RenderLine(point1.x, point1.y, point2.x, point2.y, 0xffffffff, 1);
     }
 }

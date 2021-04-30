@@ -29,7 +29,7 @@ class PhysicsBody : GameObject
     {
         points = new List<Point>();
         connections = new List<Connection>();
-        mass = newMass;
+        mass = newMass/4;
         this.isSequential = isSequential;
     }
 

@@ -27,8 +27,8 @@ class Point : Sprite
     public Point(MyGame myGame, Vec2 startingPosition, PhysicsBody physicsParent, bool beSolid = false) : base("circle.png", false, false)
     {
         SetOrigin(width / 2f, height / 2f);
-        width = 0;
-        height = 0;
+        width = 5;
+        height = 5;
 
         isSolid = beSolid;
 

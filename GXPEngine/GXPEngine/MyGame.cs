@@ -15,22 +15,44 @@ public class MyGame : Game
     Player player;
 
     Button startButton;
+    Button exitButton;
 
-	public MyGame() : base(1920, 1080, false)		// Create a window that's 800x600 and NOT fullscreen
+    bool paused;
+
+    public MyGame() : base(1920, 1080, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
         LoadMenu();
     }
 
     void Update()
 	{
+        this.scale = width / 1920f;
+
         if (startButton.Click())
         {
             startButton.LateDestroy();
+            exitButton.LateDestroy();
             LoadGame();
+        }
+        if (exitButton.Click())
+        {
+            Environment.Exit(0);
         }
 
         if (cam != null)
         {
+            if (Input.GetKeyDown(Key.ENTER))
+            {
+                foreach (GameObject obj in GetChildren())
+                {
+                    obj.LateRemove();
+                }
+                //paused = true;
+                LoadMenu();
+            }
+
+            if(!paused)
+            physicsManager.Step();
             if (Input.GetKey(Key.ZERO) && cam.scale >= 0.6f)
             {
                 cam.scale -= 0.2f;
@@ -49,8 +71,10 @@ public class MyGame : Game
 
     void LoadMenu()
     {
-        startButton = new Button(300, 300);
+        startButton = new Button(300, 300, "PlayButton.png");
         AddChild(startButton);
+        exitButton = new Button(300, 400, "ExitButton.png");
+        AddChild(exitButton);
     }
 
     void LoadGame()
@@ -59,7 +83,7 @@ public class MyGame : Game
         AddChild(player);
 
         cam = new Camera(0, 0, width, height);
-        cam.scale = 2f;
+        cam.scale = 1f;
         player.AddChild(cam);
 
         //lines.Add(new LineSegment(this, 0, 0, width, 0));
@@ -88,32 +112,14 @@ public class MyGame : Game
 
         PhysicsBody obj2 = new PhysicsBody(0.1f);
         obj2.AddPoint(new Vec2(250, 400), true);
-        obj2.AddPoint(new Vec2(450, 350), true);
+        obj2.AddPoint(new Vec2(450, 300), true);
         obj2.AddPoint(new Vec2(450, 400), true);
-        obj2.AddPoint(new Vec2(250, 450), true);
+        obj2.AddPoint(new Vec2(250, 300), true);
         physicsManager.AddPhysicsBody(obj2);
         AddChild(obj2);
+        
 
         foreach (LineSegment line in lines) AddChild(line);
         foreach (Ball ball in balls) AddChild(ball);
     }
-
-
-    void Update()
-	{
-        physicsManager.Step();
-        if (Input.GetKey(Key.ZERO) && cam.scale >= 0.6f)
-        {
-            cam.scale -= 0.2f;
-        }
-        if (Input.GetKey(Key.NINE) && cam.scale <= 3)
-        {
-            cam.scale += 0.2f;
-        }
-    }
-
-	static void Main()							// Main() is the first method that's called when the program is run
-	{
-		new MyGame().Start();					// Create a "MyGame" and start it
-	}
 }
