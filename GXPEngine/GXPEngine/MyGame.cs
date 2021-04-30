@@ -11,13 +11,15 @@ public class MyGame : Game
 
     public List<Ball> balls = new List<Ball>();
     public List<LineSegment> lines = new List<LineSegment>();
-    PhysicsManager physicsManager;
+    public PhysicsManager physicsManager;
     Camera cam;
 
     ColliderManager colliderManager = new ColliderManager();
     Player player;
 
     Button startButton;
+
+    PhysicsBody rope;
 
     public MyGame() : base(1920, 1080, false)       // Create a window that's 800x600 and NOT fullscreen
     {
@@ -26,7 +28,7 @@ public class MyGame : Game
 
     void Update()
     {
-        Console.WriteLine(Time.deltaTime);
+        Console.WriteLine(currentFps);
         if (physicsManager != null)
         {
             physicsManager.Step();
@@ -50,9 +52,9 @@ public class MyGame : Game
             }
         }
 
-        if(player != null)
+        if(rope != null && Input.GetKeyDown(Key.C))
         {
-            Console.WriteLine(player.position);
+            rope.RemoveConnection(2);
         }
     }
 
@@ -94,7 +96,7 @@ public class MyGame : Game
 
         //==== PHYSICS TESTS ====
         //SetupPhysicsTest1();
-        SetupRopePhysicsTest();
+        SetupPuzzle1();
         //=======================
 
         foreach (LineSegment line in lines) AddChild(line);
@@ -103,6 +105,7 @@ public class MyGame : Game
 
     private void SetupPhysicsTest1()
     {
+
         PhysicsBody obj = new PhysicsBody(10);
         obj.AddPoint(new Vec2(700, 250), false);
         obj.AddPoint(new Vec2(800, 250), false);
@@ -119,8 +122,8 @@ public class MyGame : Game
         AddChild(obj2);
 
         PhysicsBody obj4 = new PhysicsBody(1f);
-        obj4.AddPoint(new Vec2(300, 300), true);
         obj4.AddPoint(new Vec2(100, 300), true);
+        obj4.AddPoint(new Vec2(300, 300), true);
         obj4.AddPoint(new Vec2(300, 500), true);
         obj4.AddPoint(new Vec2(100, 500), true);
         physicsManager.AddPhysicsBody(obj4);
@@ -137,8 +140,8 @@ public class MyGame : Game
         PhysicsBody obj6 = new PhysicsBody(1f);
         obj6.AddPoint(new Vec2(300, 475), true);
         obj6.AddPoint(new Vec2(325, 475), true);
-        obj6.AddPoint(new Vec2(300, 500), true);
         obj6.AddPoint(new Vec2(325, 500), true);
+        obj6.AddPoint(new Vec2(300, 500), true);
         physicsManager.AddPhysicsBody(obj6);
         AddChild(obj6);
 
@@ -151,9 +154,9 @@ public class MyGame : Game
         AddChild(obj3);
     }
 
-    private void SetupRopePhysicsTest()
+    private void SetupPuzzle1()
     {
-        PhysicsBody rope = new PhysicsBody(isSequential: true);
+        rope = new PhysicsBody(isRope: true);
         rope.AddPoint(new Vec2(500, 50), true);
         rope.AddPoint(new Vec2(500, 100), false);
         rope.AddPoint(new Vec2(500, 150), false);
@@ -162,9 +165,17 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(rope);
         AddChild(rope);
 
+        PhysicsBody ropeBridge = new PhysicsBody(isRope: true);
+        ropeBridge.AddPoint(new Vec2(300, 500), true);
+        ropeBridge.AddPoint(new Vec2(350, 500), false);
+        ropeBridge.AddPoint(new Vec2(400, 500), false);
+        ropeBridge.AddPoint(new Vec2(450, 500), false);
+        ropeBridge.AddPoint(new Vec2(500, 500), true);
+        physicsManager.AddPhysicsBody(ropeBridge);
+        AddChild(ropeBridge);
+
         PhysicsBody danglingBlock = new PhysicsBody();
         danglingBlock.AddPoint(new Vec2(400, 275), false);
-        danglingBlock.AddPoint(new Vec2(500, 250), false);
         danglingBlock.AddPoint(new Vec2(600, 275), false);
         danglingBlock.AddPoint(new Vec2(600, 325), false);
         danglingBlock.AddPoint(new Vec2(400, 325), false);
@@ -172,13 +183,22 @@ public class MyGame : Game
         AddChild(danglingBlock);
 
         PhysicsBody block = new PhysicsBody();
-        block.AddPoint(new Vec2(350, 100), false);
-        block.AddPoint(new Vec2(450, 100), false);
-        block.AddPoint(new Vec2(450, 150), false);
-        block.AddPoint(new Vec2(350, 150), false);
+        block.AddPoint(new Vec2(300, 200), false);
+        block.AddPoint(new Vec2(500, 200), false);
+        block.AddPoint(new Vec2(500, 250), false);
+        block.AddPoint(new Vec2(300, 250), false);
         physicsManager.AddPhysicsBody(block);
         AddChild(block);
 
+        PhysicsBody floor = new PhysicsBody(1f);
+        floor.AddPoint(new Vec2(0, 500), true);
+        floor.AddPoint(new Vec2(width, 500), true);
+        floor.AddPoint(new Vec2(0, 550), true);
+        floor.AddPoint(new Vec2(width, 550), true);
+        physicsManager.AddPhysicsBody(floor);
+        AddChild(floor);
+
         physicsManager.AddConnection(new Connection(rope.points[4], danglingBlock.points[1], rope));
+        physicsManager.AddConnection(new Connection(rope.points[4], danglingBlock.points[0], rope));
     }
 }

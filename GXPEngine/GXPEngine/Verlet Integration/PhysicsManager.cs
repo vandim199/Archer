@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GXPEngine;
-
-class PhysicsManager : GameObject
+public class PhysicsManager : GameObject
 {
-    List<PhysicsBody> _physicsBodies;
+    public List<PhysicsBody> physicsBodies { get; private set; }
     List<Connection> _extraConnections;
     private MyGame _myGame;
 
@@ -15,7 +14,7 @@ class PhysicsManager : GameObject
     public PhysicsManager(MyGame myGame)
     {
         _myGame = myGame;
-        _physicsBodies = new List<PhysicsBody>();
+        physicsBodies = new List<PhysicsBody>();
         _collisionInfo = new VerletCollisionInfo();
         _extraConnections = new List<Connection>();
     }
@@ -25,7 +24,7 @@ class PhysicsManager : GameObject
         UpdatePoints();
         IterateCollisions();
 
-        foreach(Connection extra in _extraConnections)
+        foreach (Connection extra in _extraConnections)
         {
             UpdateConnection(extra);
         }
@@ -33,19 +32,25 @@ class PhysicsManager : GameObject
 
     void IterateCollisions()
     {
-        if (_physicsBodies != null && _physicsBodies.Count > 0)
+        if (physicsBodies != null && physicsBodies.Count > 0)
         {
-            foreach (PhysicsBody pb in _physicsBodies)
+            foreach (PhysicsBody pb in physicsBodies)
             {
                 UpdateConnections(pb);
 
-                foreach (PhysicsBody other in _physicsBodies)
+                if (!pb.isRope)
                 {
-                    if (pb != other)
+                    foreach (PhysicsBody other in physicsBodies)
                     {
-                        if (DetectCollision(pb, other))
+                        if (!other.isRope)
                         {
-                            ProcessCollision();
+                            if (pb != other)
+                            {
+                                if (DetectCollision(pb, other))
+                                {
+                                    ProcessCollision();
+                                }
+                            }
                         }
                     }
                 }
@@ -55,17 +60,18 @@ class PhysicsManager : GameObject
 
     public void AddPhysicsBody(PhysicsBody pb)
     {
-        _physicsBodies.Add(pb);
+        physicsBodies.Add(pb);
     }
 
     public void AddConnection(Connection connection)
     {
         _extraConnections.Add(connection);
+        _myGame.AddChild(connection);
     }
 
     void UpdatePoints()
     {
-        foreach (PhysicsBody pb in _physicsBodies)
+        foreach (PhysicsBody pb in physicsBodies)
         {
             for (int i = 0; i < pb.points.Count; i++)
             {
@@ -223,6 +229,8 @@ class PhysicsManager : GameObject
         {
             _collisionInfo.p.position += collisionVector * 0.5f;
         }
+
+        _collisionInfo.c.physicsParent.OnCollided(_collisionInfo.c, _collisionInfo.p);
     }
 
     float IntervalDistance(float minA, float maxA, float minB, float maxB)

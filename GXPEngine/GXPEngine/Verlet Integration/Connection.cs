@@ -5,7 +5,7 @@ using System.Text;
 using GXPEngine;
 using GXPEngine.Core;
 
-class Connection : GameObject
+public class Connection : GameObject
 {
     public Point point1;
     public Point point2;
