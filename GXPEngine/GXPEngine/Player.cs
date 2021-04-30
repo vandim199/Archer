@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +10,7 @@ namespace GXPEngine
         MyGame myGame;
         public Vec2 position;
         public Vec2 velocity;
+        public Vec2 acceleration;
         int speed = 7;
         int combinedInputs;
 
@@ -23,7 +24,7 @@ namespace GXPEngine
 
         //CircleCollider newBall;
 
-        public Player():base("character_placeholder.png", 9, 5)
+        public Player():base("Kasa_spritesheet.png", 6, 5)
         {
             myGame = ((MyGame)game);
             SetOrigin(width / 2, height / 2);
@@ -69,14 +70,18 @@ namespace GXPEngine
             else newBall.velocity.y *= 0.90f;
             
             if (combinedInputs == 0) SetCycle(0, 1);
-            else SetCycle(24, 4);
+            else SetCycle(0, 28, 3);
 
             if (newBall.velocity.x < 0) Mirror(true, false);
             else Mirror(false, false);
 
-            if(!grounded)
-            newBall.velocity += myGame.gravity;
-            position = newBall.position - new Vec2(0, 15);
+            if (!grounded)
+            {
+                acceleration += myGame.gravity;
+                newBall.velocity += acceleration;
+            }
+            else acceleration = new Vec2(0,0);
+            position = newBall.position - new Vec2(0, 25);
         }
 
         private void StartAiming()

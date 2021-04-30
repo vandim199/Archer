@@ -18,6 +18,9 @@ public class MyGame : Game
     Player player;
 
     Button startButton;
+    Button exitButton;
+
+    bool paused;
 
     PhysicsBody rope;
 
@@ -27,6 +30,8 @@ public class MyGame : Game
     }
 
     void Update()
+	{
+        this.scale = width / 1920f;
     {
         Console.WriteLine(currentFps);
         if (physicsManager != null)
@@ -37,11 +42,28 @@ public class MyGame : Game
         if (startButton.Click())
         {
             startButton.LateDestroy();
+            exitButton.LateDestroy();
             LoadGame();
+        }
+        if (exitButton.Click())
+        {
+            Environment.Exit(0);
         }
 
         if (cam != null)
         {
+            if (Input.GetKeyDown(Key.ENTER))
+            {
+                foreach (GameObject obj in GetChildren())
+                {
+                    obj.LateRemove();
+                }
+                //paused = true;
+                LoadMenu();
+            }
+
+            if(!paused)
+            physicsManager.Step();
             if (Input.GetKey(Key.ZERO) && cam.scale >= 0.6f)
             {
                 cam.scale -= 0.2f;
@@ -65,8 +87,10 @@ public class MyGame : Game
 
     void LoadMenu()
     {
-        startButton = new Button(300, 300);
+        startButton = new Button(300, 300, "PlayButton.png");
         AddChild(startButton);
+        exitButton = new Button(300, 400, "ExitButton.png");
+        AddChild(exitButton);
     }
 
     void LoadGame()
@@ -75,7 +99,7 @@ public class MyGame : Game
         AddChild(player);
 
         cam = new Camera(0, 0, width, height);
-        cam.scale = 2f;
+        cam.scale = 1f;
         player.AddChild(cam);
 
         //lines.Add(new LineSegment(this, 0, 0, width, 0));
@@ -120,6 +144,7 @@ public class MyGame : Game
         obj2.AddPoint(new Vec2(500, 500), true);
         physicsManager.AddPhysicsBody(obj2);
         AddChild(obj2);
+        
 
         PhysicsBody obj4 = new PhysicsBody(1f);
         obj4.AddPoint(new Vec2(100, 300), true);
