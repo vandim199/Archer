@@ -30,9 +30,8 @@ public class MyGame : Game
     }
 
     void Update()
-	{
-        this.scale = width / 1920f;
     {
+        this.scale = width / 1920f;
         Console.WriteLine(currentFps);
         if (physicsManager != null)
         {
@@ -62,8 +61,8 @@ public class MyGame : Game
                 LoadMenu();
             }
 
-            if(!paused)
-            physicsManager.Step();
+            if (!paused)
+                physicsManager.Step();
             if (Input.GetKey(Key.ZERO) && cam.scale >= 0.6f)
             {
                 cam.scale -= 0.2f;
@@ -74,7 +73,7 @@ public class MyGame : Game
             }
         }
 
-        if(rope != null && Input.GetKeyDown(Key.C))
+        if (rope != null && Input.GetKeyDown(Key.C))
         {
             rope.RemoveConnection(2);
         }
@@ -144,7 +143,7 @@ public class MyGame : Game
         obj2.AddPoint(new Vec2(500, 500), true);
         physicsManager.AddPhysicsBody(obj2);
         AddChild(obj2);
-        
+
 
         PhysicsBody obj4 = new PhysicsBody(1f);
         obj4.AddPoint(new Vec2(100, 300), true);
