@@ -5,7 +5,10 @@ using GXPEngine;								// GXPEngine contains the engine
 
 public class MyGame : Game
 {
-    public Vec2 gravity = new Vec2(0, 0.1f);
+    public Vec2 gravity = new Vec2(0, 1f);
+    public float friction = 0.995f;
+    public float groundFriction = 0.9f;
+
     public List<Ball> balls = new List<Ball>();
     public List<LineSegment> lines = new List<LineSegment>();
     PhysicsManager physicsManager;
@@ -16,13 +19,19 @@ public class MyGame : Game
 
     Button startButton;
 
-	public MyGame() : base(1920, 1080, false)		// Create a window that's 800x600 and NOT fullscreen
-	{
+    public MyGame() : base(1920, 1080, false)       // Create a window that's 800x600 and NOT fullscreen
+    {
         LoadMenu();
     }
 
     void Update()
-	{
+    {
+        Console.WriteLine(Time.deltaTime);
+        if (physicsManager != null)
+        {
+            physicsManager.Step();
+        }
+
         if (startButton.Click())
         {
             startButton.LateDestroy();
@@ -40,12 +49,17 @@ public class MyGame : Game
                 cam.scale += 0.2f;
             }
         }
+
+        if(player != null)
+        {
+            Console.WriteLine(player.position);
+        }
     }
 
-	static void Main()							// Main() is the first method that's called when the program is run
-	{
-		new MyGame().Start();					// Create a "MyGame" and start it
-	}
+    static void Main()                          // Main() is the first method that's called when the program is run
+    {
+        new MyGame().Start();                   // Create a "MyGame" and start it
+    }
 
     void LoadMenu()
     {
@@ -78,19 +92,29 @@ public class MyGame : Game
 
         physicsManager = new PhysicsManager(this);
 
-        PhysicsBody obj = new PhysicsBody(1);
-        obj.AddPoint(new Vec2(500, 250), false);
-        obj.AddPoint(new Vec2(900, 250), false);
-        obj.AddPoint(new Vec2(900, 300), false);
-        obj.AddPoint(new Vec2(500, 300), false);
+        //==== PHYSICS TESTS ====
+        //SetupPhysicsTest1();
+        SetupRopePhysicsTest();
+        //=======================
+
+        foreach (LineSegment line in lines) AddChild(line);
+        foreach (Ball ball in balls) AddChild(ball);
+    }
+
+    private void SetupPhysicsTest1()
+    {
+        PhysicsBody obj = new PhysicsBody(10);
+        obj.AddPoint(new Vec2(700, 250), false);
+        obj.AddPoint(new Vec2(800, 250), false);
+        obj.AddPoint(new Vec2(800, 300), false);
+        obj.AddPoint(new Vec2(700, 300), false);
         physicsManager.AddPhysicsBody(obj);
         AddChild(obj);
 
         PhysicsBody obj2 = new PhysicsBody(1f);
         obj2.AddPoint(new Vec2(750, 300), true);
-        obj2.AddPoint(new Vec2(550, 300), true);
         obj2.AddPoint(new Vec2(750, 500), true);
-        obj2.AddPoint(new Vec2(550, 500), true);
+        obj2.AddPoint(new Vec2(500, 500), true);
         physicsManager.AddPhysicsBody(obj2);
         AddChild(obj2);
 
@@ -102,7 +126,7 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(obj4);
         AddChild(obj4);
 
-        PhysicsBody obj5 = new PhysicsBody(1);
+        PhysicsBody obj5 = new PhysicsBody(10);
         obj5.AddPoint(new Vec2(300, 200), false);
         obj5.AddPoint(new Vec2(450, 200), false);
         obj5.AddPoint(new Vec2(450, 250), false);
@@ -125,27 +149,36 @@ public class MyGame : Game
         obj3.AddPoint(new Vec2(width, 550), true);
         physicsManager.AddPhysicsBody(obj3);
         AddChild(obj3);
-
-        foreach (LineSegment line in lines) AddChild(line);
-        foreach (Ball ball in balls) AddChild(ball);
     }
 
+    private void SetupRopePhysicsTest()
+    {
+        PhysicsBody rope = new PhysicsBody(isSequential: true);
+        rope.AddPoint(new Vec2(500, 50), true);
+        rope.AddPoint(new Vec2(500, 100), false);
+        rope.AddPoint(new Vec2(500, 150), false);
+        rope.AddPoint(new Vec2(500, 200), false);
+        rope.AddPoint(new Vec2(500, 250), false);
+        physicsManager.AddPhysicsBody(rope);
+        AddChild(rope);
 
-    void Update()
-	{
-        physicsManager.Step();
-        if (Input.GetKey(Key.ZERO) && cam.scale >= 0.6f)
-        {
-            cam.scale -= 0.2f;
-        }
-        if (Input.GetKey(Key.NINE) && cam.scale <= 3)
-        {
-            cam.scale += 0.2f;
-        }
+        PhysicsBody danglingBlock = new PhysicsBody();
+        danglingBlock.AddPoint(new Vec2(400, 275), false);
+        danglingBlock.AddPoint(new Vec2(500, 250), false);
+        danglingBlock.AddPoint(new Vec2(600, 275), false);
+        danglingBlock.AddPoint(new Vec2(600, 325), false);
+        danglingBlock.AddPoint(new Vec2(400, 325), false);
+        physicsManager.AddPhysicsBody(danglingBlock);
+        AddChild(danglingBlock);
+
+        PhysicsBody block = new PhysicsBody();
+        block.AddPoint(new Vec2(350, 100), false);
+        block.AddPoint(new Vec2(450, 100), false);
+        block.AddPoint(new Vec2(450, 150), false);
+        block.AddPoint(new Vec2(350, 150), false);
+        physicsManager.AddPhysicsBody(block);
+        AddChild(block);
+
+        physicsManager.AddConnection(new Connection(rope.points[4], danglingBlock.points[1], rope));
     }
-
-	static void Main()							// Main() is the first method that's called when the program is run
-	{
-		new MyGame().Start();					// Create a "MyGame" and start it
-	}
 }

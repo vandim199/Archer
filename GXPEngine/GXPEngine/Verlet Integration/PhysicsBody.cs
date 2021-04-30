@@ -25,7 +25,7 @@ class PhysicsBody : GameObject
     public float mass;
     private bool isSequential;
 
-    public PhysicsBody(float newMass, bool isSequential = false)
+    public PhysicsBody(float newMass = 10, bool isSequential = false)
     {
         points = new List<Point>();
         connections = new List<Connection>();

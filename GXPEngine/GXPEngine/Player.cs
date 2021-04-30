@@ -28,7 +28,7 @@ namespace GXPEngine
             myGame = ((MyGame)game);
             SetOrigin(width / 2, height / 2);
             scale = 0.5f;
-            position.SetXY(60, 60);
+            position.SetXY(60, 434);
 
             newBall = new Ball(this, position + new Vec2(0, 15), 50, 0.1f, true);
             newBall.visible = false;
