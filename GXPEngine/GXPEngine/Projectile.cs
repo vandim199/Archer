@@ -10,22 +10,9 @@ namespace GXPEngine
         private MyGame _myGame; //Reference to MyGame
         private Vec2 _velocity; //The velocity
         private Sprite _arrowGraphics; //The visuals of the arrow
-        private Point _collider; //The collider (Tip of the arrowhead)
 
         private Vec2 _oldPosition; //The old position
-        private Vec2 _position
-        {
-            get
-            {
-                return new Vec2(x, y);
-            }
-            set
-            {
-                x = value.x;
-                y = value.y;
-            }
-        } //The current position
-        private int _radius = 2;
+        private Vec2 _position; //The current position
 
         /// <summary>
         /// Constructor
@@ -43,18 +30,30 @@ namespace GXPEngine
             _arrowGraphics.SetOrigin(_arrowGraphics.width, _arrowGraphics.height / 2f);
             AddChild(_arrowGraphics);
 
-            _collider = new Point(_myGame, new Vec2(0, 0), this);
-            AddChild(_collider);
+            AddPoint(new Vec2(0, 0), false);
+            //_collider = new Point(_myGame, new Vec2(0, 0), this);
+            //myGame.AddChild(_collider);
         }
 
         void Update()
         {
             Move();
-            VerletCollisionInfo collisionInfo = GetEarliestCollision();
+
+            bool collidedWithRope;
+            VerletCollisionInfo collisionInfo = GetEarliestCollision(out collidedWithRope);
 
             if (collisionInfo != null)
             {
-                ResolveCollision(collisionInfo);
+                if (collidedWithRope)
+                {
+                    ResolveCollision(collisionInfo);
+                }
+                else
+                {
+                    PhysicsManager.ProcessCollision(collisionInfo);
+                }
+
+                this.LateDestroy();
             }
         }
 
@@ -66,6 +65,9 @@ namespace GXPEngine
             _velocity += _myGame.gravity;
             _oldPosition = _position;
             _position += _velocity;
+            _arrowGraphics.x = _position.x;
+            _arrowGraphics.y = _position.y;
+            points[0].position = _position;
             _arrowGraphics.rotation = _velocity.GetAngleDegrees();
         }
 
@@ -73,50 +75,68 @@ namespace GXPEngine
         /// Get the earliest collision of the arrow.
         /// </summary>
         /// <returns>VerletCollisionInfo containing information on the earliest collision (null if no collision occurred)</returns>
-        private VerletCollisionInfo GetEarliestCollision()
+        private VerletCollisionInfo GetEarliestCollision(out bool collidedWithRope)
         {
             VerletCollisionInfo collisionInfo = null;
+            collidedWithRope = false;
 
             //Foreach physics body in the physics manager
             foreach (PhysicsBody pb in _myGame.physicsManager.physicsBodies)
             {
-                //Check against every connection of the collider
-                foreach (Connection connection in pb.connections)
+                VerletCollisionInfo newCollision = null;
+
+                if (pb.isRope)
                 {
-                    VerletCollisionInfo newCollision = null;
-
-                    VerletCollisionInfo normalCollision = null;
-                    VerletCollisionInfo reverseCollision = null;
-
-                    normalCollision = CheckCollision(connection, false);
-                    reverseCollision = CheckCollision(connection, true);
-
-                    if (normalCollision != null && reverseCollision != null)
+                    foreach(Connection c in pb.connections)
                     {
-                        if (normalCollision.timeOfImpact < reverseCollision.timeOfImpact)
+                        VerletCollisionInfo normalCollision = null;
+                        VerletCollisionInfo reverseCollision = null;
+
+                        VerletCollisionInfo nextCollision = null;
+
+                        normalCollision = CheckLineCollision(c, false);
+                        reverseCollision = CheckLineCollision(c, true);
+
+                        if(normalCollision != null && reverseCollision != null)
                         {
-                            newCollision = normalCollision;
+                            if (normalCollision.timeOfImpact < reverseCollision.timeOfImpact)
+                            {
+                                nextCollision = normalCollision;
+                            }
+                            else
+                            {
+                                nextCollision = reverseCollision;
+                            }
                         }
-                        else
+                        else if(normalCollision != null && reverseCollision == null)
                         {
-                            newCollision = reverseCollision;
+                            nextCollision = normalCollision;
+                        }
+                        else if(normalCollision == null && reverseCollision != null)
+                        {
+                            nextCollision = reverseCollision;
+                        }
+
+                        if(nextCollision != null)
+                        {
+                            if(newCollision == null || nextCollision.timeOfImpact < newCollision.timeOfImpact)
+                            {
+                                newCollision = nextCollision;
+                            }
                         }
                     }
-                    else if (normalCollision != null && reverseCollision == null)
-                    {
-                        newCollision = normalCollision;
-                    }
-                    else if (normalCollision == null && reverseCollision != null)
-                    {
-                        newCollision = reverseCollision;
-                    }
+                }
+                else
+                {
+                    newCollision = CheckPhysicsBodyCollision(pb);
+                }
 
-                    if (newCollision != null)
+                if (newCollision != null)
+                {
+                    if (collisionInfo == null || newCollision.timeOfImpact < collisionInfo.timeOfImpact)
                     {
-                        if (collisionInfo == null || newCollision.timeOfImpact < collisionInfo.timeOfImpact)
-                        {
-                            collisionInfo = newCollision;
-                        }
+                        collisionInfo = newCollision;
+                        collidedWithRope = pb.isRope;
                     }
                 }
             }
@@ -130,7 +150,50 @@ namespace GXPEngine
         /// <param name="connection">The connection to check collisions against</param>
         /// <param name="checkReverse">Whether the opposite side of the line should be checked for collisions</param>
         /// <returns>VerletCollisionInfo containing info on the collision (Null if no collision occurred)</returns>
-        private VerletCollisionInfo CheckCollision(Connection connection, bool checkReverse)
+        private VerletCollisionInfo CheckPhysicsBodyCollision(PhysicsBody pb)
+        {
+            float minLength = 1000.0f;
+            VerletCollisionInfo colInfo = new VerletCollisionInfo();
+
+            for (int i = 0; i < pb.connections.Count; i++)
+            {
+                Connection c = pb.connections[i];
+
+                Vec2 axis = new Vec2(c.point1.y - c.point2.y, c.point2.x - c.point1.x);
+                axis.Normalize();
+
+                float minA, maxA, minB, maxB;
+                this.ProjectToAxis(axis, out minA, out maxA);
+                pb.ProjectToAxis(axis, out minB, out maxB);
+
+                float distance = PhysicsManager.IntervalDistance(minA, maxA, minB, maxB);
+
+                if (distance > 0.0f)
+                {
+                    return null;
+                }
+                else if (Mathf.Abs(distance) < minLength)
+                {
+                    minLength = Mathf.Abs(distance);
+                    colInfo.normal = axis;
+                    colInfo.c = c;
+                }
+            }
+
+            colInfo.depth = minLength;
+
+            int sing = Mathf.Sign(colInfo.normal.Dot(center - pb.center));
+
+            if (sing != 1)
+            {
+                colInfo.normal = -colInfo.normal;
+            }
+
+            colInfo.p = points[0];
+            return colInfo;
+        }
+
+        private VerletCollisionInfo CheckLineCollision(Connection connection, bool checkReverse)
         {
             Vec2 line;
             Vec2 lineStart;
@@ -169,7 +232,7 @@ namespace GXPEngine
                 {
                     if (t <= 1 && t >= 0)
                     {
-                        return new VerletCollisionInfo(lineNormal, connection, _collider, t);
+                        return new VerletCollisionInfo(-lineNormal, connection, points[0], t, _velocity.Length() * (1 - t));
                     }
                 }
             }

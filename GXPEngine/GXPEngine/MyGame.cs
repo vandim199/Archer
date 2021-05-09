@@ -5,7 +5,7 @@ using GXPEngine;								// GXPEngine contains the engine
 
 public class MyGame : Game
 {
-    public Vec2 gravity = new Vec2(0, 1f);
+    public Vec2 gravity = new Vec2(0, 0.1f);
     public float friction = 0.995f;
     public float groundFriction = 0.9f;
 
@@ -33,7 +33,7 @@ public class MyGame : Game
     {
         this.scale = width / 1920f;
         Console.WriteLine(currentFps);
-        if (physicsManager != null)
+        if (physicsManager != null && !paused)
         {
             physicsManager.Step();
         }
@@ -61,8 +61,7 @@ public class MyGame : Game
                 LoadMenu();
             }
 
-            if (!paused)
-                physicsManager.Step();
+
             if (Input.GetKey(Key.ZERO) && cam.scale >= 0.6f)
             {
                 cam.scale -= 0.2f;
@@ -129,58 +128,33 @@ public class MyGame : Game
     private void SetupPhysicsTest1()
     {
 
-        PhysicsBody obj = new PhysicsBody(10);
-        obj.AddPoint(new Vec2(700, 250), false);
-        obj.AddPoint(new Vec2(800, 250), false);
-        obj.AddPoint(new Vec2(800, 300), false);
-        obj.AddPoint(new Vec2(700, 300), false);
+        Brick obj = new Brick(new Vec2(750, 275), 100, 50, isSolid: false);
         physicsManager.AddPhysicsBody(obj);
         AddChild(obj);
 
-        PhysicsBody obj2 = new PhysicsBody(1f);
-        obj2.AddPoint(new Vec2(750, 300), true);
-        obj2.AddPoint(new Vec2(750, 500), true);
-        obj2.AddPoint(new Vec2(500, 500), true);
+        Brick obj2 = new Brick(new Vec2(width / 2f, 525), width, 50, isSolid: true);
         physicsManager.AddPhysicsBody(obj2);
         AddChild(obj2);
 
+        Brick obj3 = new Brick(new Vec2(300, 450), 25, 25, isSolid: true);
+        physicsManager.AddPhysicsBody(obj3);
+        AddChild(obj3);
 
-        PhysicsBody obj4 = new PhysicsBody(1f);
-        obj4.AddPoint(new Vec2(100, 300), true);
-        obj4.AddPoint(new Vec2(300, 300), true);
-        obj4.AddPoint(new Vec2(300, 500), true);
-        obj4.AddPoint(new Vec2(100, 500), true);
+        Brick obj4 = new Brick(new Vec2(200, 400), 200, 200, isSolid: true);
         physicsManager.AddPhysicsBody(obj4);
         AddChild(obj4);
 
-        PhysicsBody obj5 = new PhysicsBody(10);
-        obj5.AddPoint(new Vec2(300, 200), false);
-        obj5.AddPoint(new Vec2(450, 200), false);
-        obj5.AddPoint(new Vec2(450, 250), false);
-        obj5.AddPoint(new Vec2(300, 250), false);
+        Brick obj5 = new Brick(new Vec2(375, 225), 150, 50, isSolid: false);
         physicsManager.AddPhysicsBody(obj5);
         AddChild(obj5);
-
-        PhysicsBody obj6 = new PhysicsBody(1f);
-        obj6.AddPoint(new Vec2(300, 475), true);
-        obj6.AddPoint(new Vec2(325, 475), true);
-        obj6.AddPoint(new Vec2(325, 500), true);
-        obj6.AddPoint(new Vec2(300, 500), true);
-        physicsManager.AddPhysicsBody(obj6);
-        AddChild(obj6);
-
-        PhysicsBody obj3 = new PhysicsBody(1f);
-        obj3.AddPoint(new Vec2(0, 500), true);
-        obj3.AddPoint(new Vec2(width, 500), true);
-        obj3.AddPoint(new Vec2(0, 550), true);
-        obj3.AddPoint(new Vec2(width, 550), true);
-        physicsManager.AddPhysicsBody(obj3);
-        AddChild(obj3);
     }
 
     private void SetupPuzzle1()
     {
+        //Create a physics body that acts as rope
         rope = new PhysicsBody(isRope: true);
+
+        //Add the different points of the rope
         rope.AddPoint(new Vec2(500, 50), true);
         rope.AddPoint(new Vec2(500, 100), false);
         rope.AddPoint(new Vec2(500, 150), false);
@@ -189,40 +163,19 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(rope);
         AddChild(rope);
 
-        PhysicsBody ropeBridge = new PhysicsBody(isRope: true);
-        ropeBridge.AddPoint(new Vec2(300, 500), true);
-        ropeBridge.AddPoint(new Vec2(350, 500), false);
-        ropeBridge.AddPoint(new Vec2(400, 500), false);
-        ropeBridge.AddPoint(new Vec2(450, 500), false);
-        ropeBridge.AddPoint(new Vec2(500, 500), true);
-        physicsManager.AddPhysicsBody(ropeBridge);
-        AddChild(ropeBridge);
-
-        PhysicsBody danglingBlock = new PhysicsBody();
-        danglingBlock.AddPoint(new Vec2(400, 275), false);
-        danglingBlock.AddPoint(new Vec2(600, 275), false);
-        danglingBlock.AddPoint(new Vec2(600, 325), false);
-        danglingBlock.AddPoint(new Vec2(400, 325), false);
+        Brick danglingBlock = new Brick(new Vec2(600, 275), 200, 50);
         physicsManager.AddPhysicsBody(danglingBlock);
         AddChild(danglingBlock);
 
-        PhysicsBody block = new PhysicsBody();
-        block.AddPoint(new Vec2(300, 200), false);
-        block.AddPoint(new Vec2(500, 200), false);
-        block.AddPoint(new Vec2(500, 250), false);
-        block.AddPoint(new Vec2(300, 250), false);
-        physicsManager.AddPhysicsBody(block);
-        AddChild(block);
+        Brick brick = new Brick(new Vec2(400, 225), 200, 50, -45);
+        physicsManager.AddPhysicsBody(brick);
+        AddChild(brick);
 
-        PhysicsBody floor = new PhysicsBody(1f);
-        floor.AddPoint(new Vec2(0, 500), true);
-        floor.AddPoint(new Vec2(width, 500), true);
-        floor.AddPoint(new Vec2(0, 550), true);
-        floor.AddPoint(new Vec2(width, 550), true);
+        Brick floor = new Brick(new Vec2(width / 2f, 525), width, 50, isSolid: true);
         physicsManager.AddPhysicsBody(floor);
         AddChild(floor);
 
-        physicsManager.AddConnection(new Connection(rope.points[4], danglingBlock.points[1], rope));
+        //Attach the end of the rope to the top left part of the dangling block
         physicsManager.AddConnection(new Connection(rope.points[4], danglingBlock.points[0], rope));
     }
 }

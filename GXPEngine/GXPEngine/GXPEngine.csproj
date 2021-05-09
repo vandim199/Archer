@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ball.cs" />
+    <Compile Include="Brick.cs" />
     <Compile Include="Button.cs" />
     <Compile Include="Classes - Dylan\Collisions\CircleCollider.cs" />
     <Compile Include="Classes - Dylan\Collisions\ColliderManager.cs" />

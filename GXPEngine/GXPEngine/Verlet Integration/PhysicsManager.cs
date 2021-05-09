@@ -48,7 +48,7 @@ public class PhysicsManager : GameObject
                             {
                                 if (DetectCollision(pb, other))
                                 {
-                                    ProcessCollision();
+                                    ProcessCollision(_collisionInfo);
                                 }
                             }
                         }
@@ -190,23 +190,23 @@ public class PhysicsManager : GameObject
         return true;
     }
 
-    void ProcessCollision()
+    public static void ProcessCollision(VerletCollisionInfo colInfo)
     {
-        Vec2 collisionVector = _collisionInfo.normal * _collisionInfo.depth;
+        Vec2 collisionVector = colInfo.normal * colInfo.depth;
 
-        Point e1 = _collisionInfo.c.point1;
-        Point e2 = _collisionInfo.c.point2;
+        Point e1 = colInfo.c.point1;
+        Point e2 = colInfo.c.point2;
         e1.isColliding = true;
         e2.isColliding = true;
 
         float t;
         if (Mathf.Abs(e1.position.x - e2.position.x) > Mathf.Abs(e1.position.y - e2.position.y))
         {
-            t = (_collisionInfo.p.position.x - collisionVector.x - e1.position.x) / (e2.position.x - e1.position.x);
+            t = (colInfo.p.position.x - collisionVector.x - e1.position.x) / (e2.position.x - e1.position.x);
         }
         else
         {
-            t = (_collisionInfo.p.position.y - collisionVector.y - e1.position.y) / (e2.position.y - e1.position.y);
+            t = (colInfo.p.position.y - collisionVector.y - e1.position.y) / (e2.position.y - e1.position.y);
         }
 
         float lambda = 1.0f / (t * t + (1 - t) * (1 - t));
@@ -225,15 +225,15 @@ public class PhysicsManager : GameObject
             e2.position -= collisionVector * t * lambda;
         }
 
-        if (!_collisionInfo.p.isSolid)
+        if (!colInfo.p.isSolid)
         {
-            _collisionInfo.p.position += collisionVector * 0.5f;
+            colInfo.p.position += collisionVector * 0.5f;
         }
 
-        _collisionInfo.c.physicsParent.OnCollided(_collisionInfo.c, _collisionInfo.p);
+        colInfo.c.physicsParent.OnCollided(colInfo.c, colInfo.p);
     }
 
-    float IntervalDistance(float minA, float maxA, float minB, float maxB)
+    public static float IntervalDistance(float minA, float maxA, float minB, float maxB)
     {
         if (minA < minB)
         {
