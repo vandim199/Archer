@@ -103,7 +103,6 @@ public class PhysicsManager : GameObject
 
         distance.Normalize();
 
-
         if (!c.point1.isSolid && !c.point2.isSolid)
         {
             c.point1.position += distance * difference * 0.5f;
@@ -209,28 +208,66 @@ public class PhysicsManager : GameObject
             t = (colInfo.p.position.y - collisionVector.y - e1.position.y) / (e2.position.y - e1.position.y);
         }
 
+        float cMultiplier = 1;
+        float pMultiplier = 1;
+
+        if (colInfo.c.physicsParent.isPlayer)
+        {
+            cMultiplier = 2;
+            pMultiplier = 0;
+        }
+        else if (colInfo.p.physicsParent.isPlayer)
+        {
+            cMultiplier = 0;
+            pMultiplier = 2;
+        }
+
         float lambda = 1.0f / (t * t + (1 - t) * (1 - t));
 
         if (!e1.isSolid && !e2.isSolid)
         {
-            e1.position -= collisionVector * (1 - t) * 0.5f * lambda;
-            e2.position -= collisionVector * t * 0.5f * lambda;
+            e1.position -= collisionVector * (1 - t) * 0.5f * lambda * cMultiplier;
+            e2.position -= collisionVector * t * 0.5f * lambda * cMultiplier;
         }
         else if (!e1.isSolid && e2.isSolid)
         {
-            e1.position -= collisionVector * (1 - t) * lambda;
+            e1.position -= collisionVector * (1 - t) * lambda * cMultiplier;
         }
         else if (e1.isSolid && !e2.isSolid)
         {
-            e2.position -= collisionVector * t * lambda;
+            e2.position -= collisionVector * t * lambda * cMultiplier;
         }
 
         if (!colInfo.p.isSolid)
         {
-            colInfo.p.position += collisionVector * 0.5f;
+            colInfo.p.position += collisionVector * 0.5f * pMultiplier;
         }
 
         colInfo.c.physicsParent.OnCollided(colInfo.c, colInfo.p);
+
+
+        Player player;
+        if(colInfo.c.physicsParent is Player)
+        {
+            player = colInfo.c.physicsParent as Player;
+            
+            float averageCHeight = (colInfo.c.point1.y + colInfo.c.point2.y) / 2f;
+            if(averageCHeight > colInfo.c.physicsParent.center.y + 20)
+            {
+                if ((colInfo.c.angle > -50 && colInfo.c.angle < 50) || (colInfo.c.angle > 130 || colInfo.c.angle < -130))
+                {
+                    player.grounded = true;
+                }
+            }
+        }
+        else if(colInfo.p.physicsParent is Player)
+        {
+            player = colInfo.p.physicsParent as Player;
+            if(colInfo.p.y > colInfo.p.physicsParent.center.y + 20)
+            {
+                player.grounded = true;
+            }
+        }
     }
 
     public static float IntervalDistance(float minA, float maxA, float minB, float maxB)

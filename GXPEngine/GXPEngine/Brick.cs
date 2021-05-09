@@ -7,6 +7,7 @@ namespace GXPEngine
 {
     class Brick : PhysicsBody
     {
+        private Sprite _graphics;
         /// <summary>
         /// Creates a Verlet physics brick with 4 corners based on the give parameters. (Corners are created from the top left, clockwise to the bottom left)
         /// </summary>
@@ -16,9 +17,23 @@ namespace GXPEngine
         /// <param name="startRotation">The rotation of the brick</param>
         /// <param name="isSolid">Whether the brick should move or not</param>
         /// <param name="mass">The mass of the brick</param>
-        public Brick(Vec2 spawnPosition, int newWidth, int newHeight, int startRotation = 0, bool isSolid = false, int mass = 1) : base(mass)
+        public Brick(Vec2 spawnPosition, int newWidth, int newHeight, string sprite, int startRotation = 0, bool isSolid = false, int mass = 1, bool _isFloor = false) : base(mass, isFloor: _isFloor)
         {
             CreateBody(spawnPosition, newWidth, newHeight, startRotation, isSolid);
+
+            _graphics = new Sprite(sprite, addCollider: false);
+            _graphics.SetOrigin(0, 0);
+            _graphics.width = newWidth;
+            _graphics.height = newHeight;
+            AddChild(_graphics);
+        }
+
+        void Update()
+        {
+            _graphics.x = points[0].position.x;
+            _graphics.y = points[0].position.y;
+
+            _graphics.rotation = (points[1].position - points[0].position).GetAngleDegrees();
         }
 
         private void CreateBody(Vec2 spawnPosition, int newWidth, int newHeight, int startRotation, bool isSolid)

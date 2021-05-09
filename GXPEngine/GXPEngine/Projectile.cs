@@ -126,7 +126,7 @@ namespace GXPEngine
                         }
                     }
                 }
-                else
+                else if(!pb.isPlayer)
                 {
                     newCollision = CheckPhysicsBodyCollision(pb);
                 }

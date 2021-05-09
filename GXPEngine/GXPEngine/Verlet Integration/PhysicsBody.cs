@@ -25,17 +25,29 @@ public class PhysicsBody : GameObject
     }
     public float mass;
     public bool isRope;
+    public bool isPlayer;
     public bool canCut { get; private set; }
     public bool isCuttable { get; private set; }
+    public int friction;
 
-    public PhysicsBody(float newMass = 10, bool canCut = false, bool isCuttable = false, bool isRope = false)
+    protected float physicsAngle
+    {
+        get
+        {
+            return (points[1].position - points[0].position).GetAngleDegrees();
+        }
+    }
+
+    public PhysicsBody(float newMass = 10, bool canCut = false, bool isCuttable = false, bool isRope = false, bool isPlayer = false, bool isFloor = false)
     {
         points = new List<Point>();
         connections = new List<Connection>();
         mass = newMass;
         this.isRope = isRope;
+        this.isPlayer = isPlayer;
         this.canCut = canCut;
         this.isCuttable = isCuttable;
+        friction = 0;
     }
 
     public void ProjectToAxis(Vec2 axis, out float min, out float max)

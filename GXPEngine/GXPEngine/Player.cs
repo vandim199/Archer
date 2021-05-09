@@ -5,42 +5,37 @@ using System.Text;
 
 namespace GXPEngine
 {
-    class Player : AnimationSprite
+    class Player : PhysicsBody
     {
         MyGame myGame;
-        public Vec2 position;
-        public Vec2 velocity;
-        public Vec2 acceleration;
-        int speed = 7;
-        int combinedInputs;
-
-        Ball newBall;
+        int moveSpeed = 1;
+        int jumpSpeed = 20;
+        private float aimSensitivity = 10;
+        int groundFriction = 2;
 
         private Vec2 startAimPosition;
         private bool isAiming;
-        private float aimSensitivity = 10;
 
         public bool grounded = false;
 
-        //CircleCollider newBall;
+        private AnimationSprite _graphics;
+        private int spriteWidth = 75;
+        private int spriteHeight = 150;
 
-        public Player():base("Kasa_spritesheet.png", 6, 5)
+        public Player(Vec2 spawnPosition):base(0.1f, isPlayer: true)
         {
             myGame = ((MyGame)game);
-            SetOrigin(width / 2, height / 2);
-            scale = 0.5f;
-            position.SetXY(60, 434);
-
-            newBall = new Ball(this, position + new Vec2(0, 15), 50, 0.1f, true);
-            newBall.visible = false;
-            myGame.AddChild(newBall);
+            _graphics = new AnimationSprite("Kasa_spritesheet.png", 6, 5);
+            _graphics.SetOrigin(0, 0);
+            CreatePhysicsBody(spawnPosition);
+            AddChild(_graphics);
+            friction = 2;
         }
 
-        void Update()
+        public void Step()
         {
-            Animate();
+            _graphics.Animate();
             Movement();
-            UpdateScreenPosition();
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -55,33 +50,74 @@ namespace GXPEngine
             {
                 Aim();
             }
+
+            _graphics.x = points[0].position.x;
+            _graphics.y = points[0].position.y;
+        }
+
+        private void CreatePhysicsBody(Vec2 spawnPosition)
+        {
+            AddPoint(new Vec2(spawnPosition.x - (spriteWidth / 2f), spawnPosition.y - (spriteHeight / 2f)), false);
+            AddPoint(new Vec2(spawnPosition.x + (spriteWidth / 2f), spawnPosition.y - (spriteHeight / 2f)), false);
+            AddPoint(new Vec2(spawnPosition.x + (spriteWidth / 2f), spawnPosition.y + (spriteHeight / 2f)), false);
+            AddPoint(new Vec2(spawnPosition.x - (spriteWidth / 2f), spawnPosition.y + (spriteHeight / 2f)), false);
         }
 
         void Movement()
         {
-            if (Input.GetKeyDown(Key.R) || position.y > 2000) newBall.position.SetXY(60, -100);
-            combinedInputs = (Input.GetKey(Key.A) ? 1 : 0) + (Input.GetKey(Key.D) ? 1 : 0) + (Input.GetKey(Key.W) ? 1 : 0);
-
-            if (Input.GetKey(Key.A)) newBall.velocity.x = -speed;
-            else if (Input.GetKey(Key.D)) newBall.velocity.x = speed;
-            else newBall.velocity.x *= 0.90f;
-
-            if ((Input.GetKey(Key.W) || Input.GetKey(Key.SPACE)) && grounded) newBall.velocity.y = -40;
-            else newBall.velocity.y *= 0.90f;
-            
-            if (combinedInputs == 0) SetCycle(0, 1);
-            else SetCycle(0, 28, 3);
-
-            if (newBall.velocity.x < 0) Mirror(true, false);
-            else Mirror(false, false);
-
-            if (!grounded)
+            foreach(Point point in points)
             {
-                acceleration += myGame.gravity;
-                newBall.velocity += acceleration;
+                Vec2 currentPosition = point.position;
+                currentPosition.RotateAroundDegrees(-physicsAngle, center);
+                point.position = currentPosition;
             }
-            else acceleration = new Vec2(0,0);
-            position = newBall.position - new Vec2(0, 25);
+
+            Vec2 movement = new Vec2(0, 0);
+
+            if (Input.GetKey(Key.D))
+            {
+                movement += new Vec2(1, 0);
+            }
+            if (Input.GetKey(Key.A))
+            {
+                movement += new Vec2(-1, 0);
+            }
+
+            movement = movement.Normalized() * moveSpeed;
+
+            if (Input.GetKey(Key.W) && grounded)
+            {
+                movement += new Vec2(0, -jumpSpeed);
+                grounded = false;
+            }
+
+            foreach (Point point in points)
+            {
+                point.position += movement;
+            }
+
+            if(points[0].position.x - points[0].oldPosition.x < 0)
+            {
+                _graphics.Mirror(true, false);
+            }
+            else
+            {
+                _graphics.Mirror(false, false);
+            }
+
+            SetAnimation();
+        }
+
+        private void SetAnimation()
+        {
+            if(Mathf.Abs(points[0].position.x - points[0].oldPosition.x) < 0.1f)
+            {
+                _graphics.SetCycle(0, 1, 255);
+            }
+            else
+            {
+                _graphics.SetCycle(1, 26, 255);
+            }
         }
 
         private void StartAiming()
@@ -103,15 +139,9 @@ namespace GXPEngine
 
             Vec2 relativeMousePosition = startAimPosition - mousePosition;
 
-            Vec2 spawnPosition = position + (relativeMousePosition.Normalized() * 100);
+            Vec2 spawnPosition = center + (relativeMousePosition.Normalized() * 100);
 
             myGame.AddChild(new Projectile(myGame, relativeMousePosition / aimSensitivity, spawnPosition));
-        }
-
-        void UpdateScreenPosition()
-        {
-            x = position.x;
-            y = position.y;
         }
     }
 }

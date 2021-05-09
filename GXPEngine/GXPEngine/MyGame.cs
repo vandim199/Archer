@@ -36,6 +36,7 @@ public class MyGame : Game
         if (physicsManager != null && !paused)
         {
             physicsManager.Step();
+            player.Step();
         }
 
         if (startButton.Click())
@@ -51,6 +52,8 @@ public class MyGame : Game
 
         if (cam != null)
         {
+            cam.x = player.center.x;
+            cam.y = player.center.y;
             if (Input.GetKeyDown(Key.ENTER))
             {
                 foreach (GameObject obj in GetChildren())
@@ -93,7 +96,10 @@ public class MyGame : Game
 
     void LoadGame()
     {
-        player = new Player();
+        physicsManager = new PhysicsManager(this);
+
+        player = new Player(new Vec2(200, 300));
+        physicsManager.AddPhysicsBody(player);
         AddChild(player);
 
         cam = new Camera(0, 0, width, height);
@@ -101,20 +107,18 @@ public class MyGame : Game
         player.AddChild(cam);
 
         //lines.Add(new LineSegment(this, 0, 0, width, 0));
-        lines.Add(new LineSegment(this, 0, 510, 0, 200));
-        lines.Add(new LineSegment(this, width, 0, width, height));
-        lines.Add(new LineSegment(this, 300, 500, -10, 500, newFloor: true));
-        lines.Add(new LineSegment(this, 300, 600, 300, 500));
-        lines.Add(new LineSegment(this, 850, 500, 500, 500, newFloor: true));
-        lines.Add(new LineSegment(this, 500, 500, 500, 600));
-        lines.Add(new LineSegment(this, 800, 1000, 0, 1000, newFloor: true));
+        //lines.Add(new LineSegment(this, 0, 510, 0, 200));
+        //lines.Add(new LineSegment(this, width, 0, width, height));
+        //lines.Add(new LineSegment(this, 300, 500, -10, 500, newFloor: true));
+        //lines.Add(new LineSegment(this, 300, 600, 300, 500));
+        //lines.Add(new LineSegment(this, 850, 500, 500, 500, newFloor: true));
+        //lines.Add(new LineSegment(this, 500, 500, 500, 600));
+        //lines.Add(new LineSegment(this, 800, 1000, 0, 1000, newFloor: true));
 
-        lines.Add(new LineSegment(this, 1200, 420, 800, 510, newFloor: true));
+        //lines.Add(new LineSegment(this, 1200, 420, 800, 510, newFloor: true));
         //lines.Add(new LineSegment(this, 400, 450, 0, 400, newFloor: true));
 
         //AddChild(new Box());
-
-        physicsManager = new PhysicsManager(this);
 
         //==== PHYSICS TESTS ====
         //SetupPhysicsTest1();
@@ -128,23 +132,23 @@ public class MyGame : Game
     private void SetupPhysicsTest1()
     {
 
-        Brick obj = new Brick(new Vec2(750, 275), 100, 50, isSolid: false);
+        Brick obj = new Brick(new Vec2(750, 275), 100, 50, "square.png", isSolid: false);
         physicsManager.AddPhysicsBody(obj);
         AddChild(obj);
 
-        Brick obj2 = new Brick(new Vec2(width / 2f, 525), width, 50, isSolid: true);
+        Brick obj2 = new Brick(new Vec2(width / 2f, 525), width, 50, "square.png", isSolid: true, _isFloor:true);
         physicsManager.AddPhysicsBody(obj2);
         AddChild(obj2);
 
-        Brick obj3 = new Brick(new Vec2(300, 450), 25, 25, isSolid: true);
+        Brick obj3 = new Brick(new Vec2(300, 450), 25, 25, "square.png", isSolid: true);
         physicsManager.AddPhysicsBody(obj3);
         AddChild(obj3);
 
-        Brick obj4 = new Brick(new Vec2(200, 400), 200, 200, isSolid: true);
+        Brick obj4 = new Brick(new Vec2(200, 400), 200, 200, "square.png", isSolid: true);
         physicsManager.AddPhysicsBody(obj4);
         AddChild(obj4);
 
-        Brick obj5 = new Brick(new Vec2(375, 225), 150, 50, isSolid: false);
+        Brick obj5 = new Brick(new Vec2(375, 225), 150, 50, "square.png", isSolid: false);
         physicsManager.AddPhysicsBody(obj5);
         AddChild(obj5);
     }
@@ -163,15 +167,15 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(rope);
         AddChild(rope);
 
-        Brick danglingBlock = new Brick(new Vec2(600, 275), 200, 50);
+        Brick danglingBlock = new Brick(new Vec2(600, 275), 200, 50, "square.png");
         physicsManager.AddPhysicsBody(danglingBlock);
         AddChild(danglingBlock);
 
-        Brick brick = new Brick(new Vec2(400, 225), 200, 50, -45);
+        Brick brick = new Brick(new Vec2(400, 225), 200, 50, "square.png", -45);
         physicsManager.AddPhysicsBody(brick);
         AddChild(brick);
 
-        Brick floor = new Brick(new Vec2(width / 2f, 525), width, 50, isSolid: true);
+        Brick floor = new Brick(new Vec2(width / 2f, 525), width, 50, "square.png", isSolid: true, mass:0, _isFloor:true);
         physicsManager.AddPhysicsBody(floor);
         AddChild(floor);
 
