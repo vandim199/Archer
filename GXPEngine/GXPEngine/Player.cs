@@ -144,7 +144,7 @@ namespace GXPEngine
             }
             else
             {
-                _graphics.SetCycle(1, 26, 255);
+                _graphics.SetCycle(1, 26, 3);
             }
         }
 

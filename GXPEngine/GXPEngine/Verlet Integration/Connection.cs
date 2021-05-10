@@ -20,6 +20,8 @@ public class Connection : GameObject
 
     public float originalLength;
 
+    private uint _ropeWidth = 5;
+
     //===== DEBUGGING =====
     private bool _showLine = true;
     private uint _width = 2;
@@ -40,9 +42,18 @@ public class Connection : GameObject
 
     protected override void RenderSelf(GLContext glContext)
     {
-        if (_showLine)
+        if (_showLine || physicsParent.isRope)
         {
-            Gizmos.RenderLine(point1.x, point1.y, point2.x, point2.y, 0xffffffff, _width);
+            uint color = 0xffffffff;
+            uint width = _width;
+            
+            if (physicsParent.isRope)
+            {
+                color = 0xFF6B4E3A;
+                width = _ropeWidth;
+            }
+            
+            Gizmos.RenderLine(point1.x, point1.y, point2.x, point2.y, color, width);
         }
     }
 }
