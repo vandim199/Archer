@@ -169,10 +169,6 @@ public class MyGame : Game
 
     private void SetupPuzzle1()
     {
-        Rope newRope = new Rope(new Vec2(600, 100), new Vec2(700, 100));
-        physicsManager.AddPhysicsBody(newRope);
-        AddChild(newRope);
-
         Brick danglingBlock = new Brick(new Vec2(600, 275), 200, 50, "square.png");
         physicsManager.AddPhysicsBody(danglingBlock);
         AddChild(danglingBlock);

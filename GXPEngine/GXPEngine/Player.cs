@@ -9,11 +9,13 @@ namespace GXPEngine
     {
         MyGame myGame;
         int moveSpeed = 1;
+        private int _maxMovespeed = 10;
         int jumpSpeed = 20;
         private float aimSensitivity = 10;
 
-        private Vec2 startAimPosition;
-        private bool isAiming;
+        private Vec2 _startAimPosition;
+        private bool _isAiming;
+        private int _aimSensitivity;
 
         public bool grounded = false;
 
@@ -56,11 +58,6 @@ namespace GXPEngine
             _graphics.Animate();
             Movement();
 
-            if (Input.GetKeyDown(Key.R))
-            {
-                //
-            }
-
             if (Input.GetMouseButtonDown(0))
             {
                 StartAiming();
@@ -70,7 +67,7 @@ namespace GXPEngine
                 Shoot();
             }
 
-            if (isAiming)
+            if (_isAiming)
             {
                 Aim();
             }
@@ -109,7 +106,11 @@ namespace GXPEngine
 
             movement = movement.Normalized() * moveSpeed;
 
-            if(movement.x == 0 && grounded)
+            if(Mathf.Abs((points[0].position - points[0].oldPosition).Length()) > _maxMovespeed)
+            {
+                movement.x = 0;
+            }
+            else if(movement.x == 0 && grounded)
             {
                 movement.x = (points[0].oldPosition.x - points[0].position.x) * 0.1f;
             }
@@ -155,22 +156,22 @@ namespace GXPEngine
 
         private void StartAiming()
         {
-            startAimPosition = new Vec2(Input.mouseX, Input.mouseY);
-            isAiming = true;
+            _startAimPosition = new Vec2(Input.mouseX, Input.mouseY);
+            _isAiming = true;
         }
 
         private void Aim()
         {
             Vec2 mousePosition = new Vec2(Input.mouseX, Input.mouseY);
-            Gizmos.DrawLine(startAimPosition.x, startAimPosition.y, mousePosition.x, mousePosition.y, color: 0xffffffff, width: 5);
+            Gizmos.DrawLine(_startAimPosition.x, _startAimPosition.y, mousePosition.x, mousePosition.y, color: 0xffffffff, width: 5);
         }
 
         private void Shoot()
         {
-            isAiming = false;
+            _isAiming = false;
             Vec2 mousePosition = new Vec2(Input.mouseX, Input.mouseY);
 
-            Vec2 relativeMousePosition = startAimPosition - mousePosition;
+            Vec2 relativeMousePosition = _startAimPosition - mousePosition;
 
             Vec2 spawnPosition = center + (relativeMousePosition.Normalized() * 100);
 
