@@ -241,6 +241,7 @@ public class PhysicsManager : GameObject
         if (!colInfo.p.isSolid)
         {
             colInfo.p.position += collisionVector * 0.5f * pMultiplier;
+            colInfo.p.position += new Vec2((colInfo.p.oldPosition.x - colInfo.p.position.x) * 0.1f, 0);
         }
 
         colInfo.c.physicsParent.OnCollided(colInfo.c, colInfo.p);

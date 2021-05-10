@@ -35,6 +35,7 @@ public class MyGame : Game
         Console.WriteLine(currentFps);
         if (physicsManager != null && !paused)
         {
+            player.grounded = false;
             physicsManager.Step();
             player.Step();
         }

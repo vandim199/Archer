@@ -20,6 +20,11 @@ public class Connection : GameObject
 
     public float originalLength;
 
+    //===== DEBUGGING =====
+    private bool _showLine = true;
+    private uint _width = 2;
+    //=====================
+
     public Connection(Point newPoint1, Point newPoint2, PhysicsBody newPhysicsParent)
     {
         originalLength = (newPoint2.position - newPoint1.position).Length();
@@ -35,6 +40,9 @@ public class Connection : GameObject
 
     protected override void RenderSelf(GLContext glContext)
     {
-        Gizmos.RenderLine(point1.x, point1.y, point2.x, point2.y, 0xffffffff, 2);
+        if (_showLine)
+        {
+            Gizmos.RenderLine(point1.x, point1.y, point2.x, point2.y, 0xffffffff, _width);
+        }
     }
 }
