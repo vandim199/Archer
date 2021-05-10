@@ -62,7 +62,6 @@ public class MyGame : Game
         {
             float offset = player.position.x / skybox.width;
             offset = Mathf.Ceiling(offset-1);
-            Console.WriteLine("Player: " + player.position.x + " width: " + skybox.width);
 
             cam.x = player.center.x;
             cam.y = player.center.y;
@@ -206,8 +205,50 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(floor);
         AddChild(floor);
 
-        Brick floor2 = new Brick(new Vec2(1400, 525), 400, 70, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        Brick floor2 = new Brick(new Vec2(1180, 525), 400, 70, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
         physicsManager.AddPhysicsBody(floor2);
         AddChild(floor2);
+
+        Brick floor3 = new Brick(new Vec2(1750, 525), 400, 70, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        physicsManager.AddPhysicsBody(floor3);
+        AddChild(floor3);
+
+        Brick holeLeft = new Brick(new Vec2(430, 640), 300, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        physicsManager.AddPhysicsBody(holeLeft);
+        AddChild(holeLeft);
+
+        Brick holeRight = new Brick(new Vec2(950, 640), 300, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        physicsManager.AddPhysicsBody(holeRight);
+        AddChild(holeRight);
+
+        Brick holeBottom = new Brick(new Vec2(690, 755), 450, 70, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        physicsManager.AddPhysicsBody(holeBottom);
+        AddChild(holeBottom);
+
+        Brick danglingBlock = new Brick(new Vec2(430, 200), 430, 130, "pillar.png", startRotation:90);
+        physicsManager.AddPhysicsBody(danglingBlock);
+        AddChild(danglingBlock);
+
+        Brick holeLeft2 = new Brick(new Vec2(1400, 650), 320, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        physicsManager.AddPhysicsBody(holeLeft2);
+        AddChild(holeLeft2);
+
+        Brick holeRight2 = new Brick(new Vec2(1520, 650), 320, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        physicsManager.AddPhysicsBody(holeRight2);
+        AddChild(holeRight2);
+
+        Brick holeBottom2 = new Brick(new Vec2(1460, 820), 190, 30, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        physicsManager.AddPhysicsBody(holeBottom2);
+        AddChild(holeBottom2);
+
+        Brick danglingBlock2 = new Brick(new Vec2(1460, 300), 315, 50, "pillar.png", startRotation: 90);
+        physicsManager.AddPhysicsBody(danglingBlock2);
+        AddChild(danglingBlock2);
+
+        Rope rope = new Rope(new Vec2(1435, 50), danglingBlock2.points[0].position);
+        physicsManager.AddPhysicsBody(rope);
+        AddChild(rope);
+
+        rope.AddConnection(new Connection(rope.points[rope.points.Count - 1], danglingBlock2.points[3], rope));
     }
 }
