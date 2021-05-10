@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GXPEngine;
-
-class PhysicsManager : GameObject
+public class PhysicsManager : GameObject
 {
-    List<PhysicsBody> _physicsBodies;
+    public List<PhysicsBody> physicsBodies { get; private set; }
     List<Connection> _extraConnections;
     private MyGame _myGame;
 
@@ -15,7 +14,7 @@ class PhysicsManager : GameObject
     public PhysicsManager(MyGame myGame)
     {
         _myGame = myGame;
-        _physicsBodies = new List<PhysicsBody>();
+        physicsBodies = new List<PhysicsBody>();
         _collisionInfo = new VerletCollisionInfo();
         _extraConnections = new List<Connection>();
     }
@@ -25,7 +24,7 @@ class PhysicsManager : GameObject
         UpdatePoints();
         IterateCollisions();
 
-        foreach(Connection extra in _extraConnections)
+        foreach (Connection extra in _extraConnections)
         {
             UpdateConnection(extra);
         }
@@ -33,19 +32,25 @@ class PhysicsManager : GameObject
 
     void IterateCollisions()
     {
-        if (_physicsBodies != null && _physicsBodies.Count > 0)
+        if (physicsBodies != null && physicsBodies.Count > 0)
         {
-            foreach (PhysicsBody pb in _physicsBodies)
+            foreach (PhysicsBody pb in physicsBodies)
             {
                 UpdateConnections(pb);
 
-                foreach (PhysicsBody other in _physicsBodies)
+                if (!pb.isRope)
                 {
-                    if (pb != other)
+                    foreach (PhysicsBody other in physicsBodies)
                     {
-                        if (DetectCollision(pb, other))
+                        if (!other.isRope)
                         {
-                            ProcessCollision();
+                            if (pb != other)
+                            {
+                                if (DetectCollision(pb, other))
+                                {
+                                    ProcessCollision(_collisionInfo);
+                                }
+                            }
                         }
                     }
                 }
@@ -55,17 +60,18 @@ class PhysicsManager : GameObject
 
     public void AddPhysicsBody(PhysicsBody pb)
     {
-        _physicsBodies.Add(pb);
+        physicsBodies.Add(pb);
     }
 
     public void AddConnection(Connection connection)
     {
         _extraConnections.Add(connection);
+        _myGame.AddChild(connection);
     }
 
     void UpdatePoints()
     {
-        foreach (PhysicsBody pb in _physicsBodies)
+        foreach (PhysicsBody pb in physicsBodies)
         {
             for (int i = 0; i < pb.points.Count; i++)
             {
@@ -96,7 +102,6 @@ class PhysicsManager : GameObject
         float difference = distanceLength - c.originalLength;
 
         distance.Normalize();
-
 
         if (!c.point1.isSolid && !c.point2.isSolid)
         {
@@ -184,48 +189,88 @@ class PhysicsManager : GameObject
         return true;
     }
 
-    void ProcessCollision()
+    public static void ProcessCollision(VerletCollisionInfo colInfo)
     {
-        Vec2 collisionVector = _collisionInfo.normal * _collisionInfo.depth;
+        Vec2 collisionVector = colInfo.normal * colInfo.depth;
 
-        Point e1 = _collisionInfo.c.point1;
-        Point e2 = _collisionInfo.c.point2;
+        Point e1 = colInfo.c.point1;
+        Point e2 = colInfo.c.point2;
         e1.isColliding = true;
         e2.isColliding = true;
 
         float t;
         if (Mathf.Abs(e1.position.x - e2.position.x) > Mathf.Abs(e1.position.y - e2.position.y))
         {
-            t = (_collisionInfo.p.position.x - collisionVector.x - e1.position.x) / (e2.position.x - e1.position.x);
+            t = (colInfo.p.position.x - collisionVector.x - e1.position.x) / (e2.position.x - e1.position.x);
         }
         else
         {
-            t = (_collisionInfo.p.position.y - collisionVector.y - e1.position.y) / (e2.position.y - e1.position.y);
+            t = (colInfo.p.position.y - collisionVector.y - e1.position.y) / (e2.position.y - e1.position.y);
+        }
+
+        float cMultiplier = 1;
+        float pMultiplier = 1;
+
+        if (colInfo.c.physicsParent.isPlayer)
+        {
+            cMultiplier = 2;
+            pMultiplier = 0;
+        }
+        else if (colInfo.p.physicsParent.isPlayer)
+        {
+            cMultiplier = 0;
+            pMultiplier = 2;
         }
 
         float lambda = 1.0f / (t * t + (1 - t) * (1 - t));
 
         if (!e1.isSolid && !e2.isSolid)
         {
-            e1.position -= collisionVector * (1 - t) * 0.5f * lambda;
-            e2.position -= collisionVector * t * 0.5f * lambda;
+            e1.position -= collisionVector * (1 - t) * 0.5f * lambda * cMultiplier;
+            e2.position -= collisionVector * t * 0.5f * lambda * cMultiplier;
         }
         else if (!e1.isSolid && e2.isSolid)
         {
-            e1.position -= collisionVector * (1 - t) * lambda;
+            e1.position -= collisionVector * (1 - t) * lambda * cMultiplier;
         }
         else if (e1.isSolid && !e2.isSolid)
         {
-            e2.position -= collisionVector * t * lambda;
+            e2.position -= collisionVector * t * lambda * cMultiplier;
         }
 
-        if (!_collisionInfo.p.isSolid)
+        if (!colInfo.p.isSolid)
         {
-            _collisionInfo.p.position += collisionVector * 0.5f;
+            colInfo.p.position += collisionVector * 0.5f * pMultiplier;
+        }
+
+        colInfo.c.physicsParent.OnCollided(colInfo.c, colInfo.p);
+
+
+        Player player;
+        if(colInfo.c.physicsParent is Player)
+        {
+            player = colInfo.c.physicsParent as Player;
+            
+            float averageCHeight = (colInfo.c.point1.y + colInfo.c.point2.y) / 2f;
+            if(averageCHeight > colInfo.c.physicsParent.center.y + 20)
+            {
+                if ((colInfo.c.angle > -50 && colInfo.c.angle < 50) || (colInfo.c.angle > 130 || colInfo.c.angle < -130))
+                {
+                    player.grounded = true;
+                }
+            }
+        }
+        else if(colInfo.p.physicsParent is Player)
+        {
+            player = colInfo.p.physicsParent as Player;
+            if(colInfo.p.y > colInfo.p.physicsParent.center.y + 20)
+            {
+                player.grounded = true;
+            }
         }
     }
 
-    float IntervalDistance(float minA, float maxA, float minB, float maxB)
+    public static float IntervalDistance(float minA, float maxA, float minB, float maxB)
     {
         if (minA < minB)
         {

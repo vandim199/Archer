@@ -5,13 +5,13 @@ using GXPEngine;								// GXPEngine contains the engine
 
 public class MyGame : Game
 {
-    public Vec2 gravity = new Vec2(0, 1f);
+    public Vec2 gravity = new Vec2(0, 0.1f);
     public float friction = 0.995f;
     public float groundFriction = 0.9f;
 
     public List<Ball> balls = new List<Ball>();
     public List<LineSegment> lines = new List<LineSegment>();
-    PhysicsManager physicsManager;
+    public PhysicsManager physicsManager;
     Camera cam;
 
     ColliderManager colliderManager = new ColliderManager();
@@ -22,19 +22,21 @@ public class MyGame : Game
 
     bool paused;
 
+    PhysicsBody rope;
+
     public MyGame() : base(1920, 1080, false)       // Create a window that's 800x600 and NOT fullscreen
     {
         LoadMenu();
     }
 
     void Update()
-	{
+    {
         this.scale = width / 1920f;
-    
-        Console.WriteLine(Time.deltaTime);
-        if (physicsManager != null)
+        Console.WriteLine(currentFps);
+        if (physicsManager != null && !paused)
         {
             physicsManager.Step();
+            player.Step();
         }
 
         if (startButton.Click())
@@ -50,6 +52,8 @@ public class MyGame : Game
 
         if (cam != null)
         {
+            cam.x = player.center.x;
+            cam.y = player.center.y;
             if (Input.GetKeyDown(Key.ENTER))
             {
                 foreach (GameObject obj in GetChildren())
@@ -60,8 +64,7 @@ public class MyGame : Game
                 LoadMenu();
             }
 
-            if(!paused)
-            physicsManager.Step();
+
             if (Input.GetKey(Key.ZERO) && cam.scale >= 0.6f)
             {
                 cam.scale -= 0.2f;
@@ -72,9 +75,9 @@ public class MyGame : Game
             }
         }
 
-        if(player != null)
+        if (rope != null && Input.GetKeyDown(Key.C))
         {
-            Console.WriteLine(player.position);
+            rope.RemoveConnection(2);
         }
     }
 
@@ -93,7 +96,10 @@ public class MyGame : Game
 
     void LoadGame()
     {
-        player = new Player();
+        physicsManager = new PhysicsManager(this);
+
+        player = new Player(new Vec2(200, 300));
+        physicsManager.AddPhysicsBody(player);
         AddChild(player);
 
         cam = new Camera(0, 0, width, height);
@@ -101,24 +107,22 @@ public class MyGame : Game
         player.AddChild(cam);
 
         //lines.Add(new LineSegment(this, 0, 0, width, 0));
-        lines.Add(new LineSegment(this, 0, 510, 0, 200));
-        lines.Add(new LineSegment(this, width, 0, width, height));
-        lines.Add(new LineSegment(this, 300, 500, -10, 500, newFloor: true));
-        lines.Add(new LineSegment(this, 300, 600, 300, 500));
-        lines.Add(new LineSegment(this, 850, 500, 500, 500, newFloor: true));
-        lines.Add(new LineSegment(this, 500, 500, 500, 600));
-        lines.Add(new LineSegment(this, 800, 1000, 0, 1000, newFloor: true));
+        //lines.Add(new LineSegment(this, 0, 510, 0, 200));
+        //lines.Add(new LineSegment(this, width, 0, width, height));
+        //lines.Add(new LineSegment(this, 300, 500, -10, 500, newFloor: true));
+        //lines.Add(new LineSegment(this, 300, 600, 300, 500));
+        //lines.Add(new LineSegment(this, 850, 500, 500, 500, newFloor: true));
+        //lines.Add(new LineSegment(this, 500, 500, 500, 600));
+        //lines.Add(new LineSegment(this, 800, 1000, 0, 1000, newFloor: true));
 
-        lines.Add(new LineSegment(this, 1200, 420, 800, 510, newFloor: true));
+        //lines.Add(new LineSegment(this, 1200, 420, 800, 510, newFloor: true));
         //lines.Add(new LineSegment(this, 400, 450, 0, 400, newFloor: true));
 
         //AddChild(new Box());
 
-        physicsManager = new PhysicsManager(this);
-
         //==== PHYSICS TESTS ====
         //SetupPhysicsTest1();
-        SetupRopePhysicsTest();
+        SetupPuzzle1();
         //=======================
 
         foreach (LineSegment line in lines) AddChild(line);
@@ -127,58 +131,34 @@ public class MyGame : Game
 
     private void SetupPhysicsTest1()
     {
-        PhysicsBody obj = new PhysicsBody(10);
-        obj.AddPoint(new Vec2(700, 250), false);
-        obj.AddPoint(new Vec2(800, 250), false);
-        obj.AddPoint(new Vec2(800, 300), false);
-        obj.AddPoint(new Vec2(700, 300), false);
+
+        Brick obj = new Brick(new Vec2(750, 275), 100, 50, "square.png", isSolid: false);
         physicsManager.AddPhysicsBody(obj);
         AddChild(obj);
 
-        PhysicsBody obj2 = new PhysicsBody(1f);
-        obj2.AddPoint(new Vec2(750, 300), true);
-        obj2.AddPoint(new Vec2(750, 500), true);
-        obj2.AddPoint(new Vec2(500, 500), true);
+        Brick obj2 = new Brick(new Vec2(width / 2f, 525), width, 50, "square.png", isSolid: true, _isFloor:true);
         physicsManager.AddPhysicsBody(obj2);
         AddChild(obj2);
-        
 
-        PhysicsBody obj4 = new PhysicsBody(1f);
-        obj4.AddPoint(new Vec2(300, 300), true);
-        obj4.AddPoint(new Vec2(100, 300), true);
-        obj4.AddPoint(new Vec2(300, 500), true);
-        obj4.AddPoint(new Vec2(100, 500), true);
+        Brick obj3 = new Brick(new Vec2(300, 450), 25, 25, "square.png", isSolid: true);
+        physicsManager.AddPhysicsBody(obj3);
+        AddChild(obj3);
+
+        Brick obj4 = new Brick(new Vec2(200, 400), 200, 200, "square.png", isSolid: true);
         physicsManager.AddPhysicsBody(obj4);
         AddChild(obj4);
 
-        PhysicsBody obj5 = new PhysicsBody(10);
-        obj5.AddPoint(new Vec2(300, 200), false);
-        obj5.AddPoint(new Vec2(450, 200), false);
-        obj5.AddPoint(new Vec2(450, 250), false);
-        obj5.AddPoint(new Vec2(300, 250), false);
+        Brick obj5 = new Brick(new Vec2(375, 225), 150, 50, "square.png", isSolid: false);
         physicsManager.AddPhysicsBody(obj5);
         AddChild(obj5);
-
-        PhysicsBody obj6 = new PhysicsBody(1f);
-        obj6.AddPoint(new Vec2(300, 475), true);
-        obj6.AddPoint(new Vec2(325, 475), true);
-        obj6.AddPoint(new Vec2(300, 500), true);
-        obj6.AddPoint(new Vec2(325, 500), true);
-        physicsManager.AddPhysicsBody(obj6);
-        AddChild(obj6);
-
-        PhysicsBody obj3 = new PhysicsBody(1f);
-        obj3.AddPoint(new Vec2(0, 500), true);
-        obj3.AddPoint(new Vec2(width, 500), true);
-        obj3.AddPoint(new Vec2(0, 550), true);
-        obj3.AddPoint(new Vec2(width, 550), true);
-        physicsManager.AddPhysicsBody(obj3);
-        AddChild(obj3);
     }
 
-    private void SetupRopePhysicsTest()
+    private void SetupPuzzle1()
     {
-        PhysicsBody rope = new PhysicsBody(isSequential: true);
+        //Create a physics body that acts as rope
+        rope = new PhysicsBody(isRope: true);
+
+        //Add the different points of the rope
         rope.AddPoint(new Vec2(500, 50), true);
         rope.AddPoint(new Vec2(500, 100), false);
         rope.AddPoint(new Vec2(500, 150), false);
@@ -187,23 +167,19 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(rope);
         AddChild(rope);
 
-        PhysicsBody danglingBlock = new PhysicsBody();
-        danglingBlock.AddPoint(new Vec2(400, 275), false);
-        danglingBlock.AddPoint(new Vec2(500, 250), false);
-        danglingBlock.AddPoint(new Vec2(600, 275), false);
-        danglingBlock.AddPoint(new Vec2(600, 325), false);
-        danglingBlock.AddPoint(new Vec2(400, 325), false);
+        Brick danglingBlock = new Brick(new Vec2(600, 275), 200, 50, "square.png");
         physicsManager.AddPhysicsBody(danglingBlock);
         AddChild(danglingBlock);
 
-        PhysicsBody block = new PhysicsBody();
-        block.AddPoint(new Vec2(350, 100), false);
-        block.AddPoint(new Vec2(450, 100), false);
-        block.AddPoint(new Vec2(450, 150), false);
-        block.AddPoint(new Vec2(350, 150), false);
-        physicsManager.AddPhysicsBody(block);
-        AddChild(block);
+        Brick brick = new Brick(new Vec2(400, 225), 200, 50, "square.png", -45);
+        physicsManager.AddPhysicsBody(brick);
+        AddChild(brick);
 
-        physicsManager.AddConnection(new Connection(rope.points[4], danglingBlock.points[1], rope));
+        Brick floor = new Brick(new Vec2(width / 2f, 525), width, 50, "square.png", isSolid: true, mass:0, _isFloor:true);
+        physicsManager.AddPhysicsBody(floor);
+        AddChild(floor);
+
+        //Attach the end of the rope to the top left part of the dangling block
+        physicsManager.AddConnection(new Connection(rope.points[4], danglingBlock.points[0], rope));
     }
 }

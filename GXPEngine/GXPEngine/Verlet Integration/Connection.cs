@@ -5,11 +5,18 @@ using System.Text;
 using GXPEngine;
 using GXPEngine.Core;
 
-class Connection : GameObject
+public class Connection : GameObject
 {
     public Point point1;
     public Point point2;
     public PhysicsBody physicsParent;
+    public float angle
+    {
+        get
+        {
+            return (point2.position - point1.position).GetAngleDegrees();
+        }
+    }
 
     public float originalLength;
 

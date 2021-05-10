@@ -10,3 +10,9 @@ D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer\GXPEngin
 D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer\GXPEngine\GXPEngine\obj\x86\Debug\GXPEngine.pdb
 D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer\GXPEngine\GXPEngine\bin\Debug\GXPEngine.exe
 D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer\GXPEngine\GXPEngine\bin\Debug\GXPEngine.pdb
+D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer - 00 - Current\GXPEngine\GXPEngine\bin\Debug\GXPEngine.exe
+D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer - 00 - Current\GXPEngine\GXPEngine\bin\Debug\GXPEngine.pdb
+D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer - 00 - Current\GXPEngine\GXPEngine\obj\x86\Debug\GXPEngine.csprojAssemblyReference.cache
+D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer - 00 - Current\GXPEngine\GXPEngine\obj\x86\Debug\GXPEngine.csproj.CoreCompileInputs.cache
+D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer - 00 - Current\GXPEngine\GXPEngine\obj\x86\Debug\GXPEngine.exe
+D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer - 00 - Current\GXPEngine\GXPEngine\obj\x86\Debug\GXPEngine.pdb
