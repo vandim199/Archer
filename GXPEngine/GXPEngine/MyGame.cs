@@ -12,6 +12,7 @@ public class MyGame : Game
     public List<Ball> balls = new List<Ball>();
     public List<LineSegment> lines = new List<LineSegment>();
     public PhysicsManager physicsManager;
+    public Vec2 camPosition;
     Camera cam;
 
     ColliderManager colliderManager = new ColliderManager();
@@ -61,6 +62,7 @@ public class MyGame : Game
         {
             cam.x = player.center.x;
             cam.y = player.center.y;
+            camPosition = new Vec2(cam.x, cam.y);
             skybox.x = cam.x;
             if (Input.GetKeyDown(Key.ENTER))
             {

@@ -15,7 +15,8 @@ namespace GXPEngine
 
         private Vec2 _startAimPosition;
         private bool _isAiming;
-        private int _aimSensitivity;
+        private int _maxShootSpeed = 10;
+        private List<Sprite> aimDots;
 
         public bool grounded = false;
 
@@ -51,6 +52,7 @@ namespace GXPEngine
             CreatePhysicsBody(spawnPosition);
             AddChild(_graphics);
             friction = 2;
+            aimDots = new List<Sprite>();
         }
 
         public void Step()
@@ -162,12 +164,50 @@ namespace GXPEngine
 
         private void Aim()
         {
+            ClearAimDots();
+
+            int dotDistance = 3;
             Vec2 mousePosition = new Vec2(Input.mouseX, Input.mouseY);
-            Gizmos.DrawLine(_startAimPosition.x, _startAimPosition.y, mousePosition.x, mousePosition.y, color: 0xffffffff, width: 5);
+
+            Vec2 relativeMousePosition = _startAimPosition - mousePosition;
+
+            float numberOfDots = relativeMousePosition.Length() / dotDistance;
+            numberOfDots = Mathf.Round(numberOfDots);
+            float trueDotDistance = (relativeMousePosition.Length() / aimSensitivity) / numberOfDots;
+
+            Vec2 dotPosition = center + relativeMousePosition.Normalized() * 100;
+
+            Vec2 velocity = relativeMousePosition / aimSensitivity;
+            if(velocity.Length() > _maxShootSpeed)
+            {
+                velocity = velocity.Normalized() * _maxShootSpeed;
+            }
+
+            for (int i = 0; i < numberOfDots; i++)
+            {
+                Sprite newDot = new Sprite("Dot.png", false, false);
+                newDot.SetOrigin(newDot.width / 2f, newDot.height / 2f);
+                newDot.width = 5;
+                newDot.height = 5;
+
+                for (int j = 0; j < dotDistance; j++)
+                {
+                    velocity += myGame.gravity;
+                    dotPosition += velocity;
+                }
+
+                newDot.SetXY(dotPosition.x, dotPosition.y);
+                aimDots.Add(newDot);
+                AddChild(newDot);
+            }
+
+            //Gizmos.DrawLine(_startAimPosition.x, _startAimPosition.y, mousePosition.x, mousePosition.y, color: 0xffffffff, width: 5);
         }
 
         private void Shoot()
         {
+            ClearAimDots();
+
             _isAiming = false;
             Vec2 mousePosition = new Vec2(Input.mouseX, Input.mouseY);
 
@@ -177,7 +217,24 @@ namespace GXPEngine
 
             myGame.soundArrow.Play();
 
-            myGame.AddChild(new Projectile(myGame, relativeMousePosition / aimSensitivity, spawnPosition));
+            Vec2 startVelocity = relativeMousePosition / aimSensitivity;
+
+            if(startVelocity.Length() > _maxShootSpeed)
+            {
+                startVelocity = startVelocity.Normalized() * _maxShootSpeed;
+            }
+
+            myGame.AddChild(new Projectile(myGame, startVelocity, spawnPosition));
+        }
+
+        private void ClearAimDots()
+        {
+            foreach (Sprite sprite in aimDots)
+            {
+                sprite.LateDestroy();
+            }
+
+            aimDots.Clear();
         }
     }
 }
