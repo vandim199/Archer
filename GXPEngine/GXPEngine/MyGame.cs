@@ -61,13 +61,14 @@ public class MyGame : Game
 
         if (cam != null)
         {
-            float offset = player.position.x / skybox.width;
+            float offset = (player.position.x / skybox.width) * 0.15f;
             offset = Mathf.Ceiling(offset-1);
 
             cam.x = player.center.x;
             cam.y = player.center.y;
             camPosition = new Vec2(cam.x, cam.y);
-            skybox.x = offset * skybox.width;
+
+            skybox.x = offset * skybox.width + cam.x * 0.85f;
             skybox2.x = skybox.x + skybox.width;
             if (Input.GetKeyDown(Key.ENTER))
             {
@@ -143,6 +144,7 @@ public class MyGame : Game
         //SetupPhysicsTest1();
         //SetupPuzzle1();
         SetupPrototype();
+        //ParallaxTest();
         //=======================
 
         foreach (LineSegment line in lines) AddChild(line);
@@ -251,5 +253,12 @@ public class MyGame : Game
         AddChild(rope);
 
         rope.AddConnection(new Connection(rope.points[rope.points.Count - 1], danglingBlock2.points[3], rope));
+    }
+
+    private void ParallaxTest()
+    {
+        Brick floor = new Brick(new Vec2(10000, 1000), 20000, 300, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        physicsManager.AddPhysicsBody(floor);
+        AddChild(floor);
     }
 }
