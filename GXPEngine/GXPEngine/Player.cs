@@ -122,7 +122,7 @@ namespace GXPEngine
                 movement.x = (points[0].oldPosition.x - points[0].position.x) * 0.1f;
             }
 
-            if (Input.GetKey(Key.W) && grounded)
+            if (Input.GetKeyDown(Key.W) && grounded)
             {
                 movement += new Vec2(0, -jumpSpeed);
             }

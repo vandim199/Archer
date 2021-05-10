@@ -248,25 +248,25 @@ public class PhysicsManager : GameObject
 
 
         Player player;
-        if(colInfo.c.physicsParent is Player)
+        if ((colInfo.c.angle > -50 && colInfo.c.angle < 50) || (colInfo.c.angle > 130 || colInfo.c.angle < -130))
         {
-            player = colInfo.c.physicsParent as Player;
-            
-            float averageCHeight = (colInfo.c.point1.y + colInfo.c.point2.y) / 2f;
-            if(averageCHeight > colInfo.c.physicsParent.center.y + 20)
+            if (colInfo.c.physicsParent is Player)
             {
-                if ((colInfo.c.angle > -50 && colInfo.c.angle < 50) || (colInfo.c.angle > 130 || colInfo.c.angle < -130))
+                player = colInfo.c.physicsParent as Player;
+
+                float averageCHeight = (colInfo.c.point1.y + colInfo.c.point2.y) / 2f;
+                if (averageCHeight > colInfo.c.physicsParent.center.y + 20)
                 {
                     player.grounded = true;
                 }
             }
-        }
-        else if(colInfo.p.physicsParent is Player)
-        {
-            player = colInfo.p.physicsParent as Player;
-            if(colInfo.p.y > colInfo.p.physicsParent.center.y + 20)
+            else if (colInfo.p.physicsParent is Player)
             {
-                player.grounded = true;
+                player = colInfo.p.physicsParent as Player;
+                if (colInfo.p.y > colInfo.p.physicsParent.center.y + 20)
+                {
+                    player.grounded = true;
+                }
             }
         }
     }
