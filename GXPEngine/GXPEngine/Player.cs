@@ -11,7 +11,6 @@ namespace GXPEngine
         int moveSpeed = 1;
         int jumpSpeed = 20;
         private float aimSensitivity = 10;
-        int groundFriction = 2;
 
         private Vec2 startAimPosition;
         private bool isAiming;
@@ -21,6 +20,26 @@ namespace GXPEngine
         private AnimationSprite _graphics;
         private int spriteWidth = 75;
         private int spriteHeight = 150;
+
+        //Gets and sets the center of the player
+        public Vec2 position
+        {
+            get
+            {
+                return center;
+            }
+
+            set
+            {
+                Vec2 offset = (value - center);
+
+                foreach(Point point in points)
+                {
+                    point.position += offset;
+                    point.oldPosition = point.position;
+                }
+            }
+        }
 
         public Player(Vec2 spawnPosition):base(0.1f, isPlayer: true)
         {
@@ -70,7 +89,7 @@ namespace GXPEngine
 
         void Movement()
         {
-            foreach(Point point in points)
+            foreach (Point point in points)
             {
                 Vec2 currentPosition = point.position;
                 currentPosition.RotateAroundDegrees(-physicsAngle, center);
@@ -90,10 +109,19 @@ namespace GXPEngine
 
             movement = movement.Normalized() * moveSpeed;
 
+            if(movement.x == 0 && grounded)
+            {
+                movement.x = (points[0].oldPosition.x - points[0].position.x) * 0.1f;
+            }
+
             if (Input.GetKey(Key.W) && grounded)
             {
                 movement += new Vec2(0, -jumpSpeed);
-                grounded = false;
+            }
+
+            if(movement.x == 0 && grounded)
+            {
+                movement.x = (points[0].oldPosition.x - points[0].position.x) * 0.2f;
             }
 
             foreach (Point point in points)
@@ -101,11 +129,11 @@ namespace GXPEngine
                 point.position += movement;
             }
 
-            if(points[0].position.x - points[0].oldPosition.x < 0)
+            if (points[0].position.x - points[0].oldPosition.x < -0.05f)
             {
                 _graphics.Mirror(true, false);
             }
-            else
+            else if (points[0].position.x - points[0].oldPosition.x > 0.05f)
             {
                 _graphics.Mirror(false, false);
             }
@@ -115,7 +143,7 @@ namespace GXPEngine
 
         private void SetAnimation()
         {
-            if(Mathf.Abs(points[0].position.x - points[0].oldPosition.x) < 0.1f)
+            if(Mathf.Abs(points[0].position.x - points[0].oldPosition.x) < 0.05f)
             {
                 _graphics.SetCycle(0, 1, 10);
             }
