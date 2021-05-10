@@ -44,7 +44,7 @@ namespace GXPEngine
             }
         }
 
-        public Player(Vec2 spawnPosition):base(0.1f, isPlayer: true)
+        public Player(Vec2 spawnPosition):base(newMass:0.1f, isPlayer: true, bounceArrow:false)
         {
             myGame = ((MyGame)game);
             _graphics = new AnimationSprite("Kasa_spritesheet.png", 6, 5);

@@ -23,7 +23,7 @@ public class Connection : GameObject
     private uint _ropeWidth = 5;
 
     //===== DEBUGGING =====
-    private bool _showLine = true;
+    private bool _showLine = false;
     private uint _width = 2;
     //=====================
 
