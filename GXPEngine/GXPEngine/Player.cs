@@ -32,7 +32,7 @@ namespace GXPEngine
             position.SetXY(60, 434);
 
             newBall = new Ball(this, position + new Vec2(0, 15), 50, 0.1f, true);
-            newBall.visible = false;
+            //newBall.visible = false;
             myGame.AddChild(newBall);
         }
 

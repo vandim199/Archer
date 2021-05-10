@@ -30,7 +30,7 @@ public class MyGame : Game
     void Update()
 	{
         this.scale = width / 1920f;
-    {
+    
         Console.WriteLine(Time.deltaTime);
         if (physicsManager != null)
         {
