@@ -90,6 +90,7 @@
     <Compile Include="Player.cs" />
     <Compile Include="Projectile.cs" />
     <Compile Include="Box.cs" />
+    <Compile Include="Rope.cs" />
     <Compile Include="Vec2.cs" />
     <Compile Include="Verlet Integration\Connection.cs" />
     <Compile Include="Verlet Integration\PhysicsManager.cs" />

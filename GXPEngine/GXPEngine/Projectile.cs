@@ -51,9 +51,8 @@ namespace GXPEngine
                 else
                 {
                     PhysicsManager.ProcessCollision(collisionInfo);
+                    this.LateDestroy();
                 }
-
-                this.LateDestroy();
             }
         }
 
@@ -247,14 +246,9 @@ namespace GXPEngine
         private void ResolveCollision(VerletCollisionInfo collisionInfo)
         {
             //If the PhysicsBody we collided with is a rope
-            if (collisionInfo.c.physicsParent.isRope)
+            if (collisionInfo.c.physicsParent is Rope rope)
             {
-                //Cut the connection segment of the rope that we collided with
-                collisionInfo.c.physicsParent.RemoveConnection(collisionInfo.c);
-            }
-            else
-            {
-                LateDestroy();
+                rope.Break(collisionInfo.c);
             }
         }
     }
