@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GXPEngine
 {
-    class Player : PhysicsBody
+    public class Player : PhysicsBody
     {
         MyGame myGame;
         int moveSpeed = 1;
@@ -24,6 +24,7 @@ namespace GXPEngine
         private int spriteWidth = 75;
         private int spriteHeight = 150;
 
+        public Vec2 currentCheckpoint = new Vec2(50, 50);
         //Gets and sets the center of the player
         public Vec2 position
         {
@@ -47,7 +48,7 @@ namespace GXPEngine
         public Player(Vec2 spawnPosition):base(newMass:0.1f, isPlayer: true, bounceArrow:false)
         {
             myGame = ((MyGame)game);
-            _graphics = new AnimationSprite("Kasa_spritesheet.png", 6, 5);
+            _graphics = new AnimationSprite("complete_sprisheet_kasaX.png", 4, 8);
             _graphics.SetOrigin(0, 0);
             CreatePhysicsBody(spawnPosition);
             AddChild(_graphics);
@@ -62,7 +63,7 @@ namespace GXPEngine
 
             if (Input.GetKeyDown(Key.R))
             {
-                position = new Vec2(50, 50);
+                position = currentCheckpoint;
             }
 
             if (Input.GetMouseButtonDown(0))
@@ -122,7 +123,7 @@ namespace GXPEngine
                 movement.x = (points[0].oldPosition.x - points[0].position.x) * 0.1f;
             }
 
-            if ((Input.GetKey(Key.W) || Input.GetKey(Key.SPACE)) && grounded)
+            if ((Input.GetKeyDown(Key.W) || Input.GetKeyDown(Key.SPACE)) && grounded)
             {
                 movement += new Vec2(0, -jumpSpeed);
             }
@@ -151,13 +152,21 @@ namespace GXPEngine
 
         private void SetAnimation()
         {
-            if(Mathf.Abs(points[0].position.x - points[0].oldPosition.x) < 0.05f)
+            if (_isAiming)
             {
-                _graphics.SetCycle(0, 1, 3);
+                _graphics.SetCycle(0, 4, 5);
+                if (_graphics.currentFrame == 3)
+                {
+                    _graphics.SetCycle(3, 1);
+                }
+            }
+            else if(Mathf.Abs(points[0].position.x - points[0].oldPosition.x) < 0.05f)
+            {
+                _graphics.SetCycle(4, 1, 3);
             }
             else
             {
-                _graphics.SetCycle(1, 26, 3);
+                _graphics.SetCycle(5, 26, 3);
             }
         }
 

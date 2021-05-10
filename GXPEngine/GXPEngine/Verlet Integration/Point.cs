@@ -26,7 +26,7 @@ public class Point : Sprite
     public bool isColliding;
 
     //===== DEBUGGING =====
-    private int _radius = 0;
+    private int _radius = 2;
     //=====================
 
     public Point(MyGame myGame, Vec2 startingPosition, PhysicsBody physicsParent, bool beSolid = false) : base("circle.png", false, false)

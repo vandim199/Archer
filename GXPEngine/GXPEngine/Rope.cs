@@ -11,7 +11,7 @@ namespace GXPEngine
         private Vec2 _startPosition;
         private int _segmentLength;
 
-        public Rope(Vec2 startPosition, Vec2 endPosition, int segmentLength = 3): base(1, false, true, true, false, false)
+        public Rope(Vec2 startPosition, Vec2 endPosition, int segmentLength = 5): base(1, false, true, true, false, false)
         {
             _startPosition = startPosition;
             _segmentLength = segmentLength;
