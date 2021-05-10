@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GXPEngine
 {
-    class Player : PhysicsBody
+    public class Player : PhysicsBody
     {
         MyGame myGame;
         int moveSpeed = 1;
@@ -24,6 +24,7 @@ namespace GXPEngine
         private int spriteWidth = 75;
         private int spriteHeight = 150;
 
+        public Vec2 currentCheckpoint = new Vec2(50, 50);
         //Gets and sets the center of the player
         public Vec2 position
         {
@@ -62,7 +63,7 @@ namespace GXPEngine
 
             if (Input.GetKeyDown(Key.R))
             {
-                position = new Vec2(50, 50);
+                position = currentCheckpoint;
             }
 
             if (Input.GetMouseButtonDown(0))

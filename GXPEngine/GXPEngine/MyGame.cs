@@ -16,7 +16,7 @@ public class MyGame : Game
     Camera cam;
 
     ColliderManager colliderManager = new ColliderManager();
-    Player player;
+    public Player player;
 
     Button startButton;
     Button exitButton;
@@ -117,7 +117,7 @@ public class MyGame : Game
     {
         physicsManager = new PhysicsManager(this);
 
-        player = new Player(new Vec2(200, 300));
+        player = new Player(new Vec2(100, 300));
         physicsManager.AddPhysicsBody(player);
         AddChild(player);
 
@@ -244,7 +244,7 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(holeBottom2);
         AddChild(holeBottom2);
 
-        Brick danglingBlock2 = new Brick(new Vec2(1460, 300), 315, 50, "pillar.png", startRotation: 90);
+        Brick danglingBlock2 = new Brick(new Vec2(1460, 330), 315, 45, "pillar.png", startRotation: 90);
         physicsManager.AddPhysicsBody(danglingBlock2);
         AddChild(danglingBlock2);
 
@@ -252,7 +252,13 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(rope);
         AddChild(rope);
 
-        rope.AddConnection(new Connection(rope.points[rope.points.Count - 1], danglingBlock2.points[3], rope));
+        rope.AddConnection(new Connection(rope.points[rope.points.Count - 1], danglingBlock2.points[0], rope));
+
+        Checkpoint puzzle1 = new Checkpoint(new Vec2(100, 425));
+        AddChild(puzzle1);
+
+        Checkpoint puzzle2 = new Checkpoint(new Vec2(1100, 425));
+        AddChild(puzzle2);
     }
 
     private void ParallaxTest()
