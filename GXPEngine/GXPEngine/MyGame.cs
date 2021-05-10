@@ -24,6 +24,11 @@ public class MyGame : Game
 
     PhysicsBody rope;
 
+    public Sound soundLanding = new Sound("sounds/landing.mp3");
+    public Sound soundArrow = new Sound("sounds/arrow swoosh.wav");
+    Sprite skybox;
+    Sprite background;
+
     public MyGame() : base(1920, 1080, false)       // Create a window that's 800x600 and NOT fullscreen
     {
         LoadMenu();
@@ -41,9 +46,12 @@ public class MyGame : Game
 
         if (startButton.Click())
         {
-            startButton.LateDestroy();
+            background.LateDestroy();
             exitButton.LateDestroy();
+            exitButton.active = false;
             LoadGame();
+            startButton.LateDestroy();
+            startButton.active = false;
         }
         if (exitButton.Click())
         {
@@ -54,11 +62,13 @@ public class MyGame : Game
         {
             cam.x = player.center.x;
             cam.y = player.center.y;
+            skybox.x = cam.x;
             if (Input.GetKeyDown(Key.ENTER))
             {
                 foreach (GameObject obj in GetChildren())
                 {
                     obj.LateRemove();
+                    obj.LateDestroy();
                 }
                 //paused = true;
                 LoadMenu();
@@ -88,9 +98,12 @@ public class MyGame : Game
 
     void LoadMenu()
     {
-        startButton = new Button(300, 300, "PlayButton.png");
+        background = new Sprite("BG.png");
+        background.scale = 2;
+        AddChild(background);
+        startButton = new Button(width/2, 600, "PlayButton.png");
         AddChild(startButton);
-        exitButton = new Button(300, 400, "ExitButton.png");
+        exitButton = new Button(width/2, 700, "ExitButton.png");
         AddChild(exitButton);
     }
 
@@ -105,6 +118,13 @@ public class MyGame : Game
         cam = new Camera(0, 0, width, height);
         cam.scale = 1f;
         player.AddChild(cam);
+
+        skybox = new Sprite("columns.png");
+        skybox.SetOrigin(skybox.width / 2, skybox.height / 2);
+        skybox.y = height / 3;
+        skybox.scale = 0.7f;
+        AddChild(skybox);
+        SetChildIndex(skybox, 0);
 
         //lines.Add(new LineSegment(this, 0, 0, width, 0));
         //lines.Add(new LineSegment(this, 0, 510, 0, 200));

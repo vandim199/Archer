@@ -37,6 +37,11 @@ namespace GXPEngine
             _graphics.Animate();
             Movement();
 
+            if (Input.GetKeyDown(Key.R))
+            {
+                //
+            }
+
             if (Input.GetMouseButtonDown(0))
             {
                 StartAiming();
@@ -112,11 +117,11 @@ namespace GXPEngine
         {
             if(Mathf.Abs(points[0].position.x - points[0].oldPosition.x) < 0.1f)
             {
-                _graphics.SetCycle(0, 1, 255);
+                _graphics.SetCycle(0, 1, 10);
             }
             else
             {
-                _graphics.SetCycle(1, 26, 255);
+                _graphics.SetCycle(1, 26, 10);
             }
         }
 
@@ -140,6 +145,8 @@ namespace GXPEngine
             Vec2 relativeMousePosition = startAimPosition - mousePosition;
 
             Vec2 spawnPosition = center + (relativeMousePosition.Normalized() * 100);
+
+            myGame.soundArrow.Play();
 
             myGame.AddChild(new Projectile(myGame, relativeMousePosition / aimSensitivity, spawnPosition));
         }
