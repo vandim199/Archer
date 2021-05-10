@@ -22,8 +22,6 @@ public class MyGame : Game
 
     bool paused;
 
-    PhysicsBody rope;
-
     public Sound soundLanding = new Sound("sounds/landing.mp3");
     public Sound soundArrow = new Sound("sounds/arrow swoosh.wav");
     Sprite skybox;
@@ -84,11 +82,6 @@ public class MyGame : Game
             {
                 cam.scale += 0.2f;
             }
-        }
-
-        if (rope != null && Input.GetKeyDown(Key.C))
-        {
-            rope.RemoveConnection(2);
         }
     }
 
@@ -176,21 +169,17 @@ public class MyGame : Game
 
     private void SetupPuzzle1()
     {
-        //Create a physics body that acts as rope
-        rope = new PhysicsBody(isRope: true);
-
-        //Add the different points of the rope
-        rope.AddPoint(new Vec2(500, 50), true);
-        rope.AddPoint(new Vec2(500, 100), false);
-        rope.AddPoint(new Vec2(500, 150), false);
-        rope.AddPoint(new Vec2(500, 200), false);
-        rope.AddPoint(new Vec2(500, 250), false);
-        physicsManager.AddPhysicsBody(rope);
-        AddChild(rope);
+        Rope newRope = new Rope(new Vec2(600, 100), new Vec2(700, 100));
+        physicsManager.AddPhysicsBody(newRope);
+        AddChild(newRope);
 
         Brick danglingBlock = new Brick(new Vec2(600, 275), 200, 50, "square.png");
         physicsManager.AddPhysicsBody(danglingBlock);
         AddChild(danglingBlock);
+
+        Rope rope = new Rope(new Vec2(500, 50), danglingBlock.points[0].position);
+        physicsManager.AddPhysicsBody(rope);
+        AddChild(rope);
 
         Brick brick = new Brick(new Vec2(400, 225), 200, 50, "square.png", -45);
         physicsManager.AddPhysicsBody(brick);
@@ -201,6 +190,7 @@ public class MyGame : Game
         AddChild(floor);
 
         //Attach the end of the rope to the top left part of the dangling block
-        physicsManager.AddConnection(new Connection(rope.points[4], danglingBlock.points[0], rope));
+        rope.AddConnection(new Connection(rope.points[rope.points.Count - 1], danglingBlock.points[0], rope));
+        //Preferably the points that you want to connect together should have the same position
     }
 }
