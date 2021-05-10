@@ -60,6 +60,11 @@ namespace GXPEngine
             _graphics.Animate();
             Movement();
 
+            if (Input.GetKeyDown(Key.R))
+            {
+                position = new Vec2(50, 50);
+            }
+
             if (Input.GetMouseButtonDown(0))
             {
                 StartAiming();
@@ -99,11 +104,11 @@ namespace GXPEngine
 
             if (Input.GetKey(Key.D))
             {
-                movement += new Vec2(1, 0);
+                movement += new Vec2(0.5f, 0);
             }
             if (Input.GetKey(Key.A))
             {
-                movement += new Vec2(-1, 0);
+                movement += new Vec2(-0.5f, 0);
             }
 
             movement = movement.Normalized() * moveSpeed;
@@ -148,7 +153,7 @@ namespace GXPEngine
         {
             if(Mathf.Abs(points[0].position.x - points[0].oldPosition.x) < 0.05f)
             {
-                _graphics.SetCycle(0, 1, 10);
+                _graphics.SetCycle(0, 1, 3);
             }
             else
             {

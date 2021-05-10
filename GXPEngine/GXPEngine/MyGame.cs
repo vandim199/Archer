@@ -26,7 +26,9 @@ public class MyGame : Game
     public Sound soundLanding = new Sound("sounds/landing.mp3");
     public Sound soundArrow = new Sound("sounds/arrow swoosh.wav");
     Sprite skybox;
+    Sprite skybox2;
     Sprite background;
+    int skyboxWrap;
 
     public MyGame() : base(1920, 1080, false)       // Create a window that's 800x600 and NOT fullscreen
     {
@@ -36,7 +38,6 @@ public class MyGame : Game
     void Update()
     {;
         this.scale = width / 1920f;
-        Console.WriteLine(currentFps);
         if (physicsManager != null && !paused)
         {
             player.grounded = false;
@@ -49,9 +50,9 @@ public class MyGame : Game
             background.LateDestroy();
             exitButton.LateDestroy();
             exitButton.active = false;
-            LoadGame();
             startButton.LateDestroy();
             startButton.active = false;
+            LoadGame();
         }
         if (exitButton.Click())
         {
@@ -60,10 +61,15 @@ public class MyGame : Game
 
         if (cam != null)
         {
+            float offset = player.position.x / skybox.width;
+            offset = Mathf.Ceiling(offset-1);
+            Console.WriteLine("Player: " + player.position.x + " width: " + skybox.width);
+
             cam.x = player.center.x;
             cam.y = player.center.y;
             camPosition = new Vec2(cam.x, cam.y);
-            skybox.x = cam.x;
+            skybox.x = offset * skybox.width;
+            skybox2.x = skybox.x + skybox.width;
             if (Input.GetKeyDown(Key.ENTER))
             {
                 foreach (GameObject obj in GetChildren())
@@ -83,6 +89,10 @@ public class MyGame : Game
             if (Input.GetKey(Key.NINE) && cam.scale <= 3)
             {
                 cam.scale += 0.2f;
+            }
+            if (Input.GetKey(Key.EIGHT))
+            {
+                cam.scale = 1;
             }
         }
     }
@@ -120,25 +130,20 @@ public class MyGame : Game
         skybox.y = height / 3;
         skybox.scale = 0.7f;
         AddChild(skybox);
-        SetChildIndex(skybox, 0);
 
-        //lines.Add(new LineSegment(this, 0, 0, width, 0));
-        //lines.Add(new LineSegment(this, 0, 510, 0, 200));
-        //lines.Add(new LineSegment(this, width, 0, width, height));
-        //lines.Add(new LineSegment(this, 300, 500, -10, 500, newFloor: true));
-        //lines.Add(new LineSegment(this, 300, 600, 300, 500));
-        //lines.Add(new LineSegment(this, 850, 500, 500, 500, newFloor: true));
-        //lines.Add(new LineSegment(this, 500, 500, 500, 600));
-        //lines.Add(new LineSegment(this, 800, 1000, 0, 1000, newFloor: true));
+        skybox2 = new Sprite("columns.png");
+        skybox2.SetOrigin(skybox2.width / 2, skybox2.height / 2);
+        skybox2.y = height / 3;
+        skybox2.scale = 0.7f;
+        AddChild(skybox2);
 
-        //lines.Add(new LineSegment(this, 1200, 420, 800, 510, newFloor: true));
-        //lines.Add(new LineSegment(this, 400, 450, 0, 400, newFloor: true));
-
-        //AddChild(new Box());
+        SetChildIndex(skybox, -1);
+        SetChildIndex(skybox2, -2);
 
         //==== PHYSICS TESTS ====
         //SetupPhysicsTest1();
-        SetupPuzzle1();
+        //SetupPuzzle1();
+        SetupPrototype();
         //=======================
 
         foreach (LineSegment line in lines) AddChild(line);
@@ -183,12 +188,27 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(brick);
         AddChild(brick);
 
-        Brick floor = new Brick(new Vec2(width / 2f, 525), width, 50, "square.png", isSolid: true, mass:0, _isFloor:true);
+        Brick floor = new Brick(new Vec2(width / 2f, 525), width, 50, "pillar.png", isSolid: true, mass:0, _isFloor:true);
         physicsManager.AddPhysicsBody(floor);
         AddChild(floor);
 
         //Attach the end of the rope to the top left part of the dangling block
         rope.AddConnection(new Connection(rope.points[rope.points.Count - 1], danglingBlock.points[0], rope));
         //Preferably the points that you want to connect together should have the same position
+    }
+
+    private void SetupPrototype()
+    {
+        Brick wallLeft = new Brick(new Vec2(-35, 360), 400, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        physicsManager.AddPhysicsBody(wallLeft);
+        AddChild(wallLeft);
+
+        Brick floor = new Brick(new Vec2(200, 525), 400, 70, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        physicsManager.AddPhysicsBody(floor);
+        AddChild(floor);
+
+        Brick floor2 = new Brick(new Vec2(1400, 525), 400, 70, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        physicsManager.AddPhysicsBody(floor2);
+        AddChild(floor2);
     }
 }
