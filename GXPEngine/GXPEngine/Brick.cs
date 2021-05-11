@@ -27,7 +27,7 @@ namespace GXPEngine
             _graphics.height = newHeight;
             AddChild(_graphics);
 
-            if (sprite == "pillar.png") bounceArrow = false;
+            if (sprite == "plank_withered.png") bounceArrow = false;
             else bounceArrow = true;
         }
 

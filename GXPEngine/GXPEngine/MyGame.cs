@@ -161,8 +161,8 @@ public class MyGame : Game
         //skybox.alpha = 0;
         //skybox2.alpha = 0;
 
-        Sprite overlay = new Sprite("Layout2.png");
-        overlay.SetXY(-1320, -325);
+        Sprite overlay = new Sprite("Layout3.png");
+        overlay.SetXY(-1320-830, -325);
         //overlay.scale = 1.867f;
         //AddChild(overlay);
 
@@ -267,6 +267,10 @@ public class MyGame : Game
         #endregion
 
         #region floors
+        Brick LeftWall = new Brick(new Vec2(-1250, 390), 600, 100, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        physicsManager.AddPhysicsBody(LeftWall);
+        AddChild(LeftWall);
+
         Brick floor00 = new Brick(new Vec2(-900, 690), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor00);
         AddChild(floor00);
@@ -313,7 +317,7 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(holeBottom);
         AddChild(holeBottom);
 
-        Brick danglingBlock = new Brick(new Vec2(400, 200), 430, 130, "pillar.png", startRotation: 90);
+        Brick danglingBlock = new Brick(new Vec2(400, 200), 430, 130, "plank_withered.png", startRotation: 90);
         physicsManager.AddPhysicsBody(danglingBlock);
         AddChild(danglingBlock);
         #endregion
@@ -331,11 +335,11 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(holeBottom2);
         AddChild(holeBottom2);
 
-        Brick danglingBlock2 = new Brick(new Vec2(1460, 330), 315, 65, "pillar.png", startRotation: 90);
+        Brick danglingBlock2 = new Brick(new Vec2(1460, 330), 315, 65, "plank_withered.png", startRotation: 90);
         physicsManager.AddPhysicsBody(danglingBlock2);
         AddChild(danglingBlock2);
 
-        Rope rope = new Rope(new Vec2(1435, -5), danglingBlock2.points[0].position, segmentLength: 20);
+        Rope rope = new Rope(new Vec2(1435, -5), danglingBlock2.points[0].position, segmentLength: 50);
         physicsManager.AddPhysicsBody(rope);
         AddChild(rope);
 
@@ -359,17 +363,17 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(wallRight);
         AddChild(wallRight);
 
-        Brick danglingBlock3 = new Brick(new Vec2(2760, 290), 200, 200, "pillar.png", startRotation: 90);
+        Brick danglingBlock3 = new Brick(new Vec2(2760, 290), 200, 200, "blocksketch.png", startRotation: 90);
         physicsManager.AddPhysicsBody(danglingBlock3);
         AddChild(danglingBlock3);
 
-        Rope rope2 = new Rope(new Vec2(2735, -5), danglingBlock3.points[0].position, segmentLength: 20);
+        Rope rope2 = new Rope(new Vec2(2735, -5), danglingBlock3.points[0].position, segmentLength: 50);
         physicsManager.AddPhysicsBody(rope2);
         AddChild(rope2);
 
         rope2.AddConnection(new Connection(rope2.points[rope2.points.Count - 1], danglingBlock3.points[0], rope2));
 
-        Brick danglingBlock4 = new Brick(new Vec2(3000, 200), 400, 120, "pillar.png", startRotation: 90);
+        Brick danglingBlock4 = new Brick(new Vec2(3000, 200), 400, 100, "plank_withered.png", startRotation: 90);
         physicsManager.AddPhysicsBody(danglingBlock4);
         AddChild(danglingBlock4);
         #endregion
