@@ -11,7 +11,7 @@ namespace GXPEngine
         int moveSpeed = 1;
         private int _maxMovespeed = 10;
         int jumpSpeed = 20;
-        private float aimSensitivity = 10;
+        private float aimSensitivity = 20;
 
         private Vec2 _startAimPosition;
         private bool _isAiming;
@@ -60,6 +60,9 @@ namespace GXPEngine
 
         public void Step()
         {
+            Console.WriteLine();
+            Console.WriteLine(new Vec2(Input.mouseX, Input.mouseY));
+
             _graphics.Animate();
             Movement();
 
@@ -169,7 +172,7 @@ namespace GXPEngine
 
         private void StartAiming()
         {
-            _startAimPosition = new Vec2(Input.mouseX, Input.mouseY);
+            _startAimPosition = new Vec2(position.x + myGame.width / 2f - myGame.camPosition.x, position.y + myGame.height / 2f - myGame.camPosition.y);
             _isAiming = true;
         }
 
@@ -179,6 +182,8 @@ namespace GXPEngine
 
             int dotDistance = 3;
             Vec2 mousePosition = new Vec2(Input.mouseX, Input.mouseY);
+
+            _startAimPosition = new Vec2(position.x + myGame.width / 2f - myGame.camPosition.x, position.y + myGame.height / 2f - myGame.camPosition.y);
 
             Vec2 relativeMousePosition = _startAimPosition - mousePosition;
 
@@ -201,7 +206,7 @@ namespace GXPEngine
                 _graphics.Mirror(false, false);
             }
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 100; i++)
             {
                 Sprite newDot = new Sprite("Dot.png", false, false);
                 newDot.SetOrigin(newDot.width / 2f, newDot.height / 2f);
@@ -218,6 +223,8 @@ namespace GXPEngine
                 aimDots.Add(newDot);
                 AddChild(newDot);
             }
+
+            //Gizmos.DrawLine(playerWorldPosition.x, playerWorldPosition.y, mousePosition.x, mousePosition.y, color: 0xffffffff, width: 5);
         }
 
         private void Shoot()

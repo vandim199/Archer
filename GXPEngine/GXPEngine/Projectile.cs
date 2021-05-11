@@ -30,6 +30,8 @@ namespace GXPEngine
 
             _arrowGraphics = new Sprite("Arrow.png", addCollider: false);
             _arrowGraphics.SetOrigin(_arrowGraphics.width, _arrowGraphics.height / 2f);
+            _arrowGraphics.SetXY(_position.x, _position.y);
+            _arrowGraphics.rotation = _velocity.GetAngleDegrees();
             AddChild(_arrowGraphics);
 
             AddPoint(new Vec2(0, 0), false);
