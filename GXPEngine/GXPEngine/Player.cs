@@ -24,7 +24,8 @@ namespace GXPEngine
         private int spriteWidth = 75;
         private int spriteHeight = 150;
 
-        public Vec2 currentCheckpoint = new Vec2(-1000, 200);
+        public Vec2 currentCheckpoint = new Vec2(-1100, 200);
+        //-1100, 200
         //Gets and sets the center of the player
         public Vec2 position
         {
@@ -48,6 +49,7 @@ namespace GXPEngine
         public Player(Vec2 spawnPosition):base(newMass:0.1f, isPlayer: true, bounceArrow:false)
         {
             myGame = ((MyGame)game);
+            spawnPosition = currentCheckpoint;
             _graphics = new AnimationSprite("complete_sprisheet_kasaX.png", 4, 8);
             _graphics.SetOrigin(0, 0);
             CreatePhysicsBody(spawnPosition);
