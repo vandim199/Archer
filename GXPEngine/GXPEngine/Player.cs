@@ -15,7 +15,7 @@ namespace GXPEngine
 
         private Vec2 _startAimPosition;
         private bool _isAiming;
-        private int _maxShootSpeed = 10;
+        private int _maxShootSpeed = 15;
         private List<Sprite> aimDots;
 
         public bool grounded = false;
@@ -24,7 +24,7 @@ namespace GXPEngine
         private int spriteWidth = 75;
         private int spriteHeight = 150;
 
-        public Vec2 currentCheckpoint = new Vec2(50, 50);
+        public Vec2 currentCheckpoint = new Vec2(-1000, 200);
         //Gets and sets the center of the player
         public Vec2 position
         {
