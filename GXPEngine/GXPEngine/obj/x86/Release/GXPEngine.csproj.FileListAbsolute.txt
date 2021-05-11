@@ -1,0 +1,4 @@
+C:\Users\vandi\Documents\GitHub\Archer\GXPEngine\GXPEngine\bin\Release\GXPEngine.exe
+C:\Users\vandi\Documents\GitHub\Archer\GXPEngine\GXPEngine\obj\x86\Release\GXPEngine.csproj.CoreCompileInputs.cache
+C:\Users\vandi\Documents\GitHub\Archer\GXPEngine\GXPEngine\obj\x86\Release\GXPEngine.exe
+C:\Users\vandi\Documents\GitHub\Archer\GXPEngine\GXPEngine\obj\x86\Release\GXPEngine.csprojAssemblyReference.cache

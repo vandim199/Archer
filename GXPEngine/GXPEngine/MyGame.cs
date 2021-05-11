@@ -117,7 +117,7 @@ public class MyGame : Game
     {
         physicsManager = new PhysicsManager(this);
 
-        player = new Player(new Vec2(100, 300));
+        player = new Player(new Vec2(-1000, 400));
         physicsManager.AddPhysicsBody(player);
         AddChild(player);
 
@@ -200,27 +200,55 @@ public class MyGame : Game
 
     private void SetupPrototype()
     {
-        Brick wallLeft = new Brick(new Vec2(-35, 360), 400, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90, bounceArrow:true);
-        physicsManager.AddPhysicsBody(wallLeft);
-        AddChild(wallLeft);
+        Brick ceiling = new Brick(new Vec2(-900, 0), 600, 200, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        physicsManager.AddPhysicsBody(ceiling);
+        AddChild(ceiling);
 
-        Brick floor = new Brick(new Vec2(200, 525), 400, 70, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick ceiling1 = new Brick(new Vec2(-300, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        physicsManager.AddPhysicsBody(ceiling1);
+        AddChild(ceiling1);
+
+        Brick ceiling2 = new Brick(new Vec2(300, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        physicsManager.AddPhysicsBody(ceiling2);
+        AddChild(ceiling2);
+
+        Brick ceiling3 = new Brick(new Vec2(900, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        physicsManager.AddPhysicsBody(ceiling3);
+        AddChild(ceiling3);
+
+        Brick ceiling4 = new Brick(new Vec2(1500, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        physicsManager.AddPhysicsBody(ceiling4);
+        AddChild(ceiling4);
+
+        Brick floor00 = new Brick(new Vec2(-900, 690), 600, 200, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        physicsManager.AddPhysicsBody(floor00);
+        AddChild(floor00);
+
+        Brick floor0 = new Brick(new Vec2(-300, 690), 600, 200, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        physicsManager.AddPhysicsBody(floor0);
+        AddChild(floor0);
+
+        Brick floor = new Brick(new Vec2(165, 540), 600, 100, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
         physicsManager.AddPhysicsBody(floor);
         AddChild(floor);
 
-        Brick floor2 = new Brick(new Vec2(1180, 525), 400, 70, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick floor2 = new Brick(new Vec2(1160, 525), 500, 70, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
         physicsManager.AddPhysicsBody(floor2);
         AddChild(floor2);
 
-        Brick floor3 = new Brick(new Vec2(1750, 525), 400, 70, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick floor3 = new Brick(new Vec2(1750, 525), 500, 70, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
         physicsManager.AddPhysicsBody(floor3);
         AddChild(floor3);
 
-        Brick holeLeft = new Brick(new Vec2(430, 640), 300, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        Brick tipOver = new Brick(new Vec2(280, 450), 80, 80, "stoneplatform.png", isSolid: true, mass: 0);
+        physicsManager.AddPhysicsBody(tipOver);
+        AddChild(tipOver);
+
+        Brick holeLeft = new Brick(new Vec2(430, 690), 200, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
         physicsManager.AddPhysicsBody(holeLeft);
         AddChild(holeLeft);
 
-        Brick holeRight = new Brick(new Vec2(950, 640), 300, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        Brick holeRight = new Brick(new Vec2(950, 675), 230, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
         physicsManager.AddPhysicsBody(holeRight);
         AddChild(holeRight);
 
@@ -228,36 +256,36 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(holeBottom);
         AddChild(holeBottom);
 
-        Brick danglingBlock = new Brick(new Vec2(430, 200), 430, 130, "pillar.png", startRotation:90, bounceArrow:true);
+        Brick danglingBlock = new Brick(new Vec2(400, 200), 430, 130, "pillar.png", startRotation:90);
         physicsManager.AddPhysicsBody(danglingBlock);
         AddChild(danglingBlock);
 
-        Brick holeLeft2 = new Brick(new Vec2(1400, 650), 320, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        Brick holeLeft2 = new Brick(new Vec2(1375, 685), 250, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
         physicsManager.AddPhysicsBody(holeLeft2);
         AddChild(holeLeft2);
 
-        Brick holeRight2 = new Brick(new Vec2(1520, 650), 320, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        Brick holeRight2 = new Brick(new Vec2(1535, 685), 250, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
         physicsManager.AddPhysicsBody(holeRight2);
         AddChild(holeRight2);
 
-        Brick holeBottom2 = new Brick(new Vec2(1460, 820), 190, 30, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick holeBottom2 = new Brick(new Vec2(1455, 820), 230, 30, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
         physicsManager.AddPhysicsBody(holeBottom2);
         AddChild(holeBottom2);
 
-        Brick danglingBlock2 = new Brick(new Vec2(1460, 330), 315, 45, "pillar.png", startRotation: 90);
+        Brick danglingBlock2 = new Brick(new Vec2(1460, 330), 315, 65, "pillar.png", startRotation: 90);
         physicsManager.AddPhysicsBody(danglingBlock2);
         AddChild(danglingBlock2);
 
-        Rope rope = new Rope(new Vec2(1435, 50), danglingBlock2.points[0].position);
+        Rope rope = new Rope(new Vec2(1435, -5), danglingBlock2.points[0].position);
         physicsManager.AddPhysicsBody(rope);
         AddChild(rope);
 
         rope.AddConnection(new Connection(rope.points[rope.points.Count - 1], danglingBlock2.points[0], rope));
 
-        Checkpoint puzzle1 = new Checkpoint(new Vec2(100, 425));
+        Checkpoint puzzle1 = new Checkpoint(new Vec2(50, 370));
         AddChild(puzzle1);
 
-        Checkpoint puzzle2 = new Checkpoint(new Vec2(1100, 425));
+        Checkpoint puzzle2 = new Checkpoint(new Vec2(1100, 370));
         AddChild(puzzle2);
     }
 
