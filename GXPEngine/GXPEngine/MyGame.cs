@@ -73,11 +73,7 @@ public class MyGame : Game
             skybox2.x = skybox.x + skybox.width;
             if (Input.GetKeyDown(Key.ENTER))
             {
-                foreach (GameObject obj in GetChildren())
-                {
-                    obj.LateRemove();
-                    obj.LateDestroy();
-                }
+                Clear();
                 //paused = true;
                 LoadMenu();
             }
@@ -103,6 +99,15 @@ public class MyGame : Game
         new MyGame().Start();                   // Create a "MyGame" and start it
     }
 
+    private void Clear()
+    {
+        foreach (GameObject obj in GetChildren())
+        {
+            obj.LateRemove();
+            obj.LateDestroy();
+        }
+    }
+
     void LoadMenu()
     {
         background = new Sprite("BG.png");
@@ -111,6 +116,16 @@ public class MyGame : Game
         startButton = new Button(width / 2, 600, "PlayButton.png");
         AddChild(startButton);
         exitButton = new Button(width / 2, 700, "ExitButton.png");
+        AddChild(exitButton);
+    }
+
+    private void LoadVictoryScreen()
+    {
+        background = new Sprite("BG.png");
+        background.scale = 2;
+        AddChild(background);
+
+        exitButton = new Button(width / 2f, 600, "ExitButton.png");
         AddChild(exitButton);
     }
 
@@ -335,7 +350,7 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(rope2);
         AddChild(rope2);
 
-        rope2.AddConnection(new Connection(rope2.points[rope.points.Count - 1], danglingBlock3.points[0], rope2));
+        rope2.AddConnection(new Connection(rope2.points[rope2.points.Count - 1], danglingBlock3.points[0], rope2));
 
         Brick danglingBlock4 = new Brick(new Vec2(3000, 200), 400, 120, "pillar.png", startRotation: 90);
         physicsManager.AddPhysicsBody(danglingBlock4);

@@ -206,7 +206,7 @@ namespace GXPEngine
                 _graphics.Mirror(false, false);
             }
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 100; i++)
             {
                 Sprite newDot = new Sprite("Dot.png", false, false);
                 newDot.SetOrigin(newDot.width / 2f, newDot.height / 2f);
