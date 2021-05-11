@@ -73,7 +73,6 @@ public class MyGame : Game
             skybox2.x = skybox.x + skybox.width;
             if (Input.GetKeyDown(Key.ENTER))
             {
-                Clear();
                 //paused = true;
                 LoadMenu();
             }
@@ -90,6 +89,10 @@ public class MyGame : Game
             if (Input.GetKey(Key.EIGHT))
             {
                 cam.scale = 1;
+            }
+            if (Input.GetKey(Key.G))
+            {
+                LoadVictoryScreen();
             }
         }
     }
@@ -110,6 +113,7 @@ public class MyGame : Game
 
     void LoadMenu()
     {
+        Clear();
         background = new Sprite("BG.png");
         background.scale = 2;
         AddChild(background);
@@ -121,6 +125,7 @@ public class MyGame : Game
 
     private void LoadVictoryScreen()
     {
+        Clear();
         background = new Sprite("BG.png");
         background.scale = 2;
         AddChild(background);

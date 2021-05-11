@@ -11,6 +11,8 @@ public class PhysicsManager : GameObject
 
     private VerletCollisionInfo _collisionInfo;
 
+    private static Sound SFXPlayerLanding = new Sound("sounds/short landing.wav");
+
     public PhysicsManager(MyGame myGame)
     {
         _myGame = myGame;
@@ -248,7 +250,7 @@ public class PhysicsManager : GameObject
 
 
         Player player;
-        if ((colInfo.c.angle > -50 && colInfo.c.angle < 50) || (colInfo.c.angle > 130 || colInfo.c.angle < -130))
+        if ((colInfo.c.angle > -75 && colInfo.c.angle < 75) || (colInfo.c.angle > 105 || colInfo.c.angle < -105))
         {
             if (colInfo.c.physicsParent is Player)
             {
@@ -258,6 +260,10 @@ public class PhysicsManager : GameObject
                 if (averageCHeight > colInfo.c.physicsParent.center.y + 20)
                 {
                     player.grounded = true;
+                    if (player.velocity.y > 7)
+                    {
+                        SFXPlayerLanding.Play();
+                    }
                 }
             }
             else if (colInfo.p.physicsParent is Player)
@@ -266,6 +272,10 @@ public class PhysicsManager : GameObject
                 if (colInfo.p.y > colInfo.p.physicsParent.center.y + 20)
                 {
                     player.grounded = true;
+                    if(player.velocity.y > 7)
+                    {
+                        SFXPlayerLanding.Play();
+                    }
                 }
             }
         }

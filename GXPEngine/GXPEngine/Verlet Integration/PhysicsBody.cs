@@ -23,6 +23,22 @@ public class PhysicsBody : GameObject
             return total / points.Count;
         }
     }
+
+    public Vec2 oldCenter
+    {
+        get
+        {
+            Vec2 total = new Vec2(0, 0);
+
+            foreach (Point point in points)
+            {
+                total += point.oldPosition;
+            }
+
+            return total / points.Count;
+        }
+    }
+
     public float mass;
     public bool isRope;
     public bool isPlayer;

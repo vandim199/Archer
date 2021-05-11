@@ -24,6 +24,19 @@ namespace GXPEngine
         private int spriteWidth = 75;
         private int spriteHeight = 150;
 
+        public Vec2 velocity
+        {
+            get
+            {
+                return (center - oldCenter);
+            }
+        }
+
+        private bool isRunning = false;
+
+        private Sound SFXRunning = new Sound("sounds/updated run.wav", true, false);
+        private SoundChannel SFXChannel;
+
         public Vec2 currentCheckpoint = new Vec2(-1100, 200);
         //-1100, 200
         //Gets and sets the center of the player
@@ -52,17 +65,17 @@ namespace GXPEngine
             spawnPosition = currentCheckpoint;
             _graphics = new AnimationSprite("complete_sprisheet_kasaX.png", 4, 8);
             _graphics.SetOrigin(0, 0);
-            CreatePhysicsBody(spawnPosition);
             AddChild(_graphics);
+
+            SFXChannel = new SoundChannel(0);
+
+            CreatePhysicsBody(spawnPosition);
             friction = 2;
             aimDots = new List<Sprite>();
         }
 
         public void Step()
         {
-            Console.WriteLine();
-            Console.WriteLine(new Vec2(Input.mouseX, Input.mouseY));
-
             _graphics.Animate();
             Movement();
 
@@ -124,6 +137,20 @@ namespace GXPEngine
             else if (movement.x > 0.05f)
             {
                 _graphics.Mirror(false, false);
+            }
+
+            if (Mathf.Abs(movement.x) > 0.05f && grounded)
+            {
+                if (!isRunning)
+                {
+                    SFXChannel = SFXRunning.Play();
+                    isRunning = true;
+                }
+            }
+            else if(isRunning || !grounded)
+            {
+                SFXChannel.Stop();
+                isRunning = false;
             }
 
             SetAnimation(movement);
