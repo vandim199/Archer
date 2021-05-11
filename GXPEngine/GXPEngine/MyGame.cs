@@ -200,43 +200,43 @@ public class MyGame : Game
 
     private void SetupPrototype()
     {
-        Brick ceiling = new Brick(new Vec2(-900, 0), 600, 200, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        Brick ceiling = new Brick(new Vec2(-900, 0), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(ceiling);
         AddChild(ceiling);
 
-        Brick ceiling1 = new Brick(new Vec2(-300, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        Brick ceiling1 = new Brick(new Vec2(-300, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(ceiling1);
         AddChild(ceiling1);
 
-        Brick ceiling2 = new Brick(new Vec2(300, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        Brick ceiling2 = new Brick(new Vec2(300, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(ceiling2);
         AddChild(ceiling2);
 
-        Brick ceiling3 = new Brick(new Vec2(900, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        Brick ceiling3 = new Brick(new Vec2(900, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(ceiling3);
         AddChild(ceiling3);
 
-        Brick ceiling4 = new Brick(new Vec2(1500, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        Brick ceiling4 = new Brick(new Vec2(1500, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(ceiling4);
         AddChild(ceiling4);
 
-        Brick floor00 = new Brick(new Vec2(-900, 690), 600, 200, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        Brick floor00 = new Brick(new Vec2(-900, 690), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor00);
         AddChild(floor00);
 
-        Brick floor0 = new Brick(new Vec2(-300, 690), 600, 200, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        Brick floor0 = new Brick(new Vec2(-300, 690), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor0);
         AddChild(floor0);
 
-        Brick floor = new Brick(new Vec2(165, 540), 600, 100, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        Brick floor = new Brick(new Vec2(165, 540), 600, 100, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor);
         AddChild(floor);
 
-        Brick floor2 = new Brick(new Vec2(1160, 525), 500, 70, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        Brick floor2 = new Brick(new Vec2(1160, 525), 500, 70, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor2);
         AddChild(floor2);
 
-        Brick floor3 = new Brick(new Vec2(1750, 525), 500, 70, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        Brick floor3 = new Brick(new Vec2(1750, 525), 500, 70, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor3);
         AddChild(floor3);
 
@@ -268,7 +268,7 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(holeRight2);
         AddChild(holeRight2);
 
-        Brick holeBottom2 = new Brick(new Vec2(1455, 820), 230, 30, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        Brick holeBottom2 = new Brick(new Vec2(1455, 820), 230, 30, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(holeBottom2);
         AddChild(holeBottom2);
 
