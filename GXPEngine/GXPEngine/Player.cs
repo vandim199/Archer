@@ -112,6 +112,17 @@ namespace GXPEngine
                 movement += new Vec2(-0.5f, 0);
             }
 
+            if (movement.x < -0.05f)
+            {
+                _graphics.Mirror(true, false);
+            }
+            else if (movement.x > 0.05f)
+            {
+                _graphics.Mirror(false, false);
+            }
+
+            SetAnimation(movement);
+
             movement = movement.Normalized() * moveSpeed;
 
             if(Mathf.Abs((points[0].position - points[0].oldPosition).Length()) > _maxMovespeed)
@@ -128,29 +139,13 @@ namespace GXPEngine
                 movement += new Vec2(0, -jumpSpeed);
             }
 
-            if(movement.x == 0 && grounded)
-            {
-                movement.x = (points[0].oldPosition.x - points[0].position.x) * 0.2f;
-            }
-
             foreach (Point point in points)
             {
                 point.position += movement;
             }
-
-            if (points[0].position.x - points[0].oldPosition.x < -0.05f)
-            {
-                _graphics.Mirror(true, false);
-            }
-            else if (points[0].position.x - points[0].oldPosition.x > 0.05f)
-            {
-                _graphics.Mirror(false, false);
-            }
-
-            SetAnimation();
         }
 
-        private void SetAnimation()
+        private void SetAnimation(Vec2 movement)
         {
             if (_isAiming)
             {
@@ -160,7 +155,7 @@ namespace GXPEngine
                     _graphics.SetCycle(3, 1);
                 }
             }
-            else if(Mathf.Abs(points[0].position.x - points[0].oldPosition.x) < 0.05f)
+            else if(Mathf.Abs(movement.x) < 0.05f)
             {
                 _graphics.SetCycle(4, 1, 3);
             }
@@ -185,10 +180,6 @@ namespace GXPEngine
 
             Vec2 relativeMousePosition = _startAimPosition - mousePosition;
 
-            float numberOfDots = relativeMousePosition.Length() / dotDistance;
-            numberOfDots = Mathf.Round(numberOfDots);
-            float trueDotDistance = (relativeMousePosition.Length() / aimSensitivity) / numberOfDots;
-
             Vec2 dotPosition = center + relativeMousePosition.Normalized() * 100;
 
             Vec2 velocity = relativeMousePosition / aimSensitivity;
@@ -197,7 +188,18 @@ namespace GXPEngine
                 velocity = velocity.Normalized() * _maxShootSpeed;
             }
 
-            for (int i = 0; i < numberOfDots; i++)
+            velocity *= 1.5f;
+
+            if(velocity.x < -0.05f)
+            {
+                _graphics.Mirror(true, false);
+            }
+            else if(velocity.x > 0.05f)
+            {
+                _graphics.Mirror(false, false);
+            }
+
+            for (int i = 0; i < 10; i++)
             {
                 Sprite newDot = new Sprite("Dot.png", false, false);
                 newDot.SetOrigin(newDot.width / 2f, newDot.height / 2f);
@@ -206,7 +208,7 @@ namespace GXPEngine
 
                 for (int j = 0; j < dotDistance; j++)
                 {
-                    velocity += myGame.gravity;
+                    velocity += myGame.gravity * 1.5f;
                     dotPosition += velocity;
                 }
 
@@ -214,8 +216,6 @@ namespace GXPEngine
                 aimDots.Add(newDot);
                 AddChild(newDot);
             }
-
-            //Gizmos.DrawLine(_startAimPosition.x, _startAimPosition.y, mousePosition.x, mousePosition.y, color: 0xffffffff, width: 5);
         }
 
         private void Shoot()
@@ -238,7 +238,7 @@ namespace GXPEngine
                 startVelocity = startVelocity.Normalized() * _maxShootSpeed;
             }
 
-            myGame.AddChild(new Projectile(myGame, startVelocity, spawnPosition));
+            myGame.AddChild(new Projectile(myGame, startVelocity * 1.5f, spawnPosition));
         }
 
         private void ClearAimDots()

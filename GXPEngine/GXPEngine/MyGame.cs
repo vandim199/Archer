@@ -263,7 +263,7 @@ public class MyGame : Game
 
     private void ParallaxTest()
     {
-        Brick floor = new Brick(new Vec2(10000, 1000), 20000, 300, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        Brick floor = new Brick(new Vec2(10000, 1000), 20000, 300, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor);
         AddChild(floor);
     }
