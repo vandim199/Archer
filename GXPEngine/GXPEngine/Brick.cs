@@ -17,7 +17,7 @@ namespace GXPEngine
         /// <param name="startRotation">The rotation of the brick</param>
         /// <param name="isSolid">Whether the brick should move or not</param>
         /// <param name="mass">The mass of the brick</param>
-        public Brick(Vec2 spawnPosition, int newWidth, int newHeight, string sprite, int startRotation = 0, bool isSolid = false, int mass = 1, bool bounceArrow = false) : base(mass, bounceArrow:bounceArrow)
+        public Brick(Vec2 spawnPosition, int newWidth, int newHeight, string sprite, int startRotation = 0, bool isSolid = false, int mass = 1) : base(mass)
         {
             CreateBody(spawnPosition, newWidth, newHeight, startRotation, isSolid);
 
@@ -26,6 +26,9 @@ namespace GXPEngine
             _graphics.width = newWidth;
             _graphics.height = newHeight;
             AddChild(_graphics);
+
+            if (sprite == "pillar.png") bounceArrow = false;
+            else bounceArrow = true;
         }
 
         void Update()
