@@ -51,7 +51,16 @@ namespace GXPEngine
                 else
                 {
                     PhysicsManager.ProcessCollision(collisionInfo);
-                    this.LateDestroy();
+
+                    if ((collisionInfo.c.physicsParent.bounceArrow && collisionInfo.c.physicsParent != this)
+                        || (collisionInfo.p.physicsParent.bounceArrow && collisionInfo.p.physicsParent != this))
+                    {
+                        _velocity.Reflect(collisionInfo.normal, 1);
+                    }
+                    else
+                    {
+                        this.LateDestroy();
+                    }
                 }
             }
         }

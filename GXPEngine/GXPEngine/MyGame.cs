@@ -158,7 +158,7 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(obj);
         AddChild(obj);
 
-        Brick obj2 = new Brick(new Vec2(width / 2f, 525), width, 50, "square.png", isSolid: true, _isFloor:true);
+        Brick obj2 = new Brick(new Vec2(width / 2f, 525), width, 50, "square.png", isSolid: true);
         physicsManager.AddPhysicsBody(obj2);
         AddChild(obj2);
 
@@ -189,7 +189,7 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(brick);
         AddChild(brick);
 
-        Brick floor = new Brick(new Vec2(width / 2f, 525), width, 50, "pillar.png", isSolid: true, mass:0, _isFloor:true);
+        Brick floor = new Brick(new Vec2(width / 2f, 525), width, 50, "pillar.png", isSolid: true, mass:0);
         physicsManager.AddPhysicsBody(floor);
         AddChild(floor);
 
@@ -252,7 +252,7 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(holeRight);
         AddChild(holeRight);
 
-        Brick holeBottom = new Brick(new Vec2(690, 755), 450, 70, "stoneplatform.png", isSolid: true, mass: 0, _isFloor: true);
+        Brick holeBottom = new Brick(new Vec2(690, 755), 450, 70, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(holeBottom);
         AddChild(holeBottom);
 

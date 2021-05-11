@@ -29,6 +29,7 @@ public class PhysicsBody : GameObject
     public bool canCut { get; private set; }
     public bool isCuttable { get; private set; }
     public int friction;
+    public bool bounceArrow;
 
     protected float physicsAngle
     {
@@ -38,7 +39,7 @@ public class PhysicsBody : GameObject
         }
     }
 
-    public PhysicsBody(float newMass = 10, bool canCut = false, bool isCuttable = false, bool isRope = false, bool isPlayer = false, bool isFloor = false)
+    public PhysicsBody(float newMass = 10, bool canCut = false, bool isCuttable = false, bool isRope = false, bool isPlayer = false, bool bounceArrow = false)
     {
         points = new List<Point>();
         connections = new List<Connection>();
@@ -47,6 +48,7 @@ public class PhysicsBody : GameObject
         this.isPlayer = isPlayer;
         this.canCut = canCut;
         this.isCuttable = isCuttable;
+        this.bounceArrow = bounceArrow;
         friction = 0;
     }
 
