@@ -24,7 +24,7 @@ namespace GXPEngine
         private int spriteWidth = 75;
         private int spriteHeight = 150;
 
-        public Vec2 currentCheckpoint = new Vec2(-1100, 200);
+        public Vec2 currentCheckpoint = new Vec2(2200, 370);
         //-1100, 200
         //Gets and sets the center of the player
         public Vec2 position
