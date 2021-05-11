@@ -14,6 +14,8 @@ namespace GXPEngine
         private Vec2 _oldPosition; //The old position
         private Vec2 _position; //The current position
 
+        public bool hasBounced = false;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -52,9 +54,11 @@ namespace GXPEngine
                 {
                     PhysicsManager.ProcessCollision(collisionInfo);
 
-                    if ((collisionInfo.c.physicsParent.bounceArrow && collisionInfo.c.physicsParent != this)
+                    if (((collisionInfo.c.physicsParent.bounceArrow && collisionInfo.c.physicsParent != this)
                         || (collisionInfo.p.physicsParent.bounceArrow && collisionInfo.p.physicsParent != this))
+                        && !hasBounced)
                     {
+                        hasBounced = true;
                         _velocity.Reflect(collisionInfo.normal, 1);
                     }
                     else
@@ -70,7 +74,7 @@ namespace GXPEngine
         /// </summary>
         private void Move()
         {
-            _velocity += _myGame.gravity;
+            _velocity += _myGame.gravity * 1.5f;
             _oldPosition = _position;
             _position += _velocity;
             _arrowGraphics.x = _position.x;
