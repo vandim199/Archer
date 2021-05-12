@@ -37,7 +37,7 @@ namespace GXPEngine
         }
         
 
-        public Ball(GameObject newRealParent, Vec2 newPos, float newRadius = 10, float newBounciness = 1, bool newMoving = false):base("Ball.png")
+        public Ball(GameObject newRealParent, Vec2 newPos, float newRadius = 10, float newBounciness = 1, bool newMoving = false):base("images/Ball.png")
         {
             realParent = newRealParent;
             SetOrigin(width/2, height/2);

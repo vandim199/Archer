@@ -260,7 +260,7 @@ public class PhysicsManager : GameObject
                 ((colInfo.normal.GetAngleDegrees() > 70 && colInfo.normal.GetAngleDegrees() < 110)
                 || (colInfo.normal.GetAngleDegrees() < -70 && colInfo.normal.GetAngleDegrees() > -110)))
             {
-                if (brick1.graphicsImage == "plank_withered.png")
+                if (brick1.graphicsImage == "images/plank_withered.png")
                 {
                     SFXLogFalling.Play();
                 }
@@ -274,7 +274,7 @@ public class PhysicsManager : GameObject
         {
             if (colInfo.p.position.y - colInfo.p.oldPosition.y > 2 && colInfo.normal.GetAngleDegrees() != -180 && colInfo.normal.GetAngleDegrees() != 180)
             {
-                if (brick2.graphicsImage == "plank_withered.png")
+                if (brick2.graphicsImage == "images/plank_withered.png")
                 {
                     SFXLogFalling.Play();
                 }

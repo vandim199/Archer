@@ -29,7 +29,7 @@ namespace GXPEngine
             AddChild(graphics);
             graphicsImage = sprite;
 
-            if (sprite == "plank_withered.png") bounceArrow = false;
+            if (sprite == "images/plank_withered.png") bounceArrow = false;
             else bounceArrow = true;
         }
 

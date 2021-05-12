@@ -1,9 +1,5 @@
-C:\Users\vandi\Documents\GitHub\Archer\GXPEngine\GXPEngine\bin\Debug\GXPEngine.exe
-C:\Users\vandi\Documents\GitHub\Archer\GXPEngine\GXPEngine\bin\Debug\GXPEngine.pdb
 C:\Users\vandi\Documents\GitHub\Archer\GXPEngine\GXPEngine\obj\x86\Debug\GXPEngine.csprojAssemblyReference.cache
 C:\Users\vandi\Documents\GitHub\Archer\GXPEngine\GXPEngine\obj\x86\Debug\GXPEngine.csproj.CoreCompileInputs.cache
-C:\Users\vandi\Documents\GitHub\Archer\GXPEngine\GXPEngine\obj\x86\Debug\GXPEngine.exe
-C:\Users\vandi\Documents\GitHub\Archer\GXPEngine\GXPEngine\obj\x86\Debug\GXPEngine.pdb
 D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer\GXPEngine\GXPEngine\obj\x86\Debug\GXPEngine.csprojAssemblyReference.cache
 D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer\GXPEngine\GXPEngine\obj\x86\Debug\GXPEngine.csproj.CoreCompileInputs.cache
 D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer\GXPEngine\GXPEngine\obj\x86\Debug\GXPEngine.exe
@@ -16,3 +12,7 @@ D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer - 00 - C
 D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer - 00 - Current\GXPEngine\GXPEngine\obj\x86\Debug\GXPEngine.csproj.CoreCompileInputs.cache
 D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer - 00 - Current\GXPEngine\GXPEngine\obj\x86\Debug\GXPEngine.exe
 D:\Files\School\Saxion\Year 1\Term 4\Project Final Approach\Game\Archer - 00 - Current\GXPEngine\GXPEngine\obj\x86\Debug\GXPEngine.pdb
+C:\Users\vandi\Documents\GitHub\Archer\GXPEngine\GXPEngine\bin\Debug\Kasa.exe
+C:\Users\vandi\Documents\GitHub\Archer\GXPEngine\GXPEngine\bin\Debug\Kasa.pdb
+C:\Users\vandi\Documents\GitHub\Archer\GXPEngine\GXPEngine\obj\x86\Debug\Kasa.exe
+C:\Users\vandi\Documents\GitHub\Archer\GXPEngine\GXPEngine\obj\x86\Debug\Kasa.pdb

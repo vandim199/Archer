@@ -29,7 +29,7 @@ public class Point : Sprite
     private int _radius = 0;
     //=====================
 
-    public Point(MyGame myGame, Vec2 startingPosition, PhysicsBody physicsParent, bool beSolid = false) : base("circle.png", false, false)
+    public Point(MyGame myGame, Vec2 startingPosition, PhysicsBody physicsParent, bool beSolid = false) : base("images/circle.png", false, false)
     {
         SetOrigin(width / 2f, height / 2f);
         width = _radius;

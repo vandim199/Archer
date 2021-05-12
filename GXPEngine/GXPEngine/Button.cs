@@ -9,7 +9,7 @@ namespace GXPEngine
     {
         public bool active = true;
 
-        public Button(float x, float y, string texture = "square.png", float scale = 0.5f):base(texture, 1, 3)
+        public Button(float x, float y, string texture = "images/square.png", float scale = 0.5f):base(texture, 1, 3)
         {
             SetXY(x, y);
             SetOrigin(width / 2, height / 2);

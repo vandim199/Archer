@@ -45,7 +45,6 @@ public class MyGame : Game
 
     void Update()
     {
-        this.scale = width / 1920f;
         if (physicsManager != null && !paused)
         {
             player.grounded = false;
@@ -70,6 +69,8 @@ public class MyGame : Game
 
         if (cam != null)
         {
+            if (player.position.x > 4500) LoadVictoryScreen();
+
             float offset = (player.position.x / skybox.width) * 0.15f;
             offset = Mathf.Ceiling(offset - 1);
 
@@ -94,24 +95,7 @@ public class MyGame : Game
 
             if (Input.GetKeyDown(Key.ENTER))
             {
-                //paused = true;
                 LoadMenu();
-            }
-            if (Input.GetKey(Key.ZERO) && cam.scale >= 0.6f)
-            {
-                cam.scale -= 0.2f;
-            }
-            if (Input.GetKey(Key.NINE) && cam.scale <= 3)
-            {
-                cam.scale += 0.2f;
-            }
-            if (Input.GetKey(Key.EIGHT))
-            {
-                cam.scale = 1;
-            }
-            if (Input.GetKey(Key.G))
-            {
-                LoadVictoryScreen();
             }
         }
     }
@@ -133,28 +117,34 @@ public class MyGame : Game
     void LoadMenu()
     {
         Clear();
-        background = new Sprite("BG.png");
+        background = new Sprite("images/BG.png");
         background.scale = 2;
         AddChild(background);
-        logo = new Sprite("Kasa Logo.png");
+        logo = new Sprite("images/Kasa Logo.png");
         logo.SetOrigin(logo.width / 2, logo.height / 2);
         logo.SetXY(width / 2, height / 3);
         logo.scale = 0.6f;
         AddChild(logo);
-        startButton = new Button(width / 2, 600, "PlayButton.png");
+        startButton = new Button(width / 2, 600, "images/PlayButton.png");
         AddChild(startButton);
-        exitButton = new Button(width / 2, 700, "ExitButton.png");
+        exitButton = new Button(width / 2, 700, "images/ExitButton.png");
         AddChild(exitButton);
     }
 
     private void LoadVictoryScreen()
     {
         Clear();
-        background = new Sprite("BG.png");
+        background = new Sprite("images/BG.png");
         background.scale = 2;
         AddChild(background);
 
-        exitButton = new Button(width / 2f, 600, "ExitButton.png");
+        Sprite youWin = new Sprite("images/YouWin.png");
+        youWin.SetOrigin(youWin.width / 2, youWin.height / 2);
+        youWin.SetXY(width / 2, 300);
+        AddChild(youWin);
+
+        exitButton = new Button(width / 2f, 600, "images/ExitButton.png");
+        exitButton.active = true;
         AddChild(exitButton);
     }
 
@@ -169,28 +159,28 @@ public class MyGame : Game
         cam.scale = 1f;
         player.AddChild(cam);
 
-        tips = new Sprite("Reset.png");
+        tips = new Sprite("images/Reset.png");
         tips.SetOrigin(width / 2, height / 2);
 
-        skybox = new Sprite("columns.png");
+        skybox = new Sprite("images/columns.png");
         skybox.SetOrigin(skybox.width / 2, skybox.height / 2);
         skybox.y = height / 2;
         skybox.scale = 0.7f;
         AddChild(skybox);
 
-        skybox2 = new Sprite("columns.png");
+        skybox2 = new Sprite("images/columns.png");
         skybox2.SetOrigin(skybox2.width / 2, skybox2.height / 2);
         skybox2.y = height / 2;
         skybox2.scale = 0.7f;
         AddChild(skybox2);
 
-        waterfall = new Sprite("waterfallsketch.png");
+        waterfall = new Sprite("images/waterfallsketch.png");
         waterfall.SetOrigin(waterfall.width / 2, waterfall.height / 2);
         waterfall.y = height / 2.5f;
         waterfall.scale = 0.8f;
         AddChild(waterfall);
 
-        waterfall2 = new Sprite("waterfallsketch.png");
+        waterfall2 = new Sprite("images/waterfallsketch.png");
         waterfall2.SetOrigin(waterfall2.width / 2, waterfall2.height / 2);
         waterfall2.y = height / 2.5f;
         waterfall2.scale = 0.8f;
@@ -199,7 +189,7 @@ public class MyGame : Game
         //skybox.alpha = 0;
         //skybox2.alpha = 0;
 
-        Sprite overlay = new Sprite("Layout33.png");
+        Sprite overlay = new Sprite("images/Layout33.png");
         overlay.SetXY(-1320-830, -325);
         //overlay.scale = 1.867f;
         //AddChild(overlay);
@@ -276,113 +266,113 @@ public class MyGame : Game
     private void SetupPrototype()
     {
         #region ceilings
-        Brick ceiling = new Brick(new Vec2(-900, 0), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick ceiling = new Brick(new Vec2(-900, 0), 600, 200, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(ceiling);
         AddChild(ceiling);
 
-        Brick ceiling1 = new Brick(new Vec2(1500, -100), 4200, 200, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick ceiling1 = new Brick(new Vec2(1500, -100), 4200, 200, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(ceiling1);
         AddChild(ceiling1);
         
-        Brick ceiling2 = new Brick(new Vec2(4200, 100), 800, 100, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick ceiling2 = new Brick(new Vec2(4200, 100), 800, 100, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(ceiling2);
         AddChild(ceiling2);
 
-        Brick ceiling3 = new Brick(new Vec2(4750, 230), 400, 50, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 35);
+        Brick ceiling3 = new Brick(new Vec2(4750, 230), 400, 50, "images/stoneplatform.png", isSolid: true, mass: 0, startRotation: 35);
         physicsManager.AddPhysicsBody(ceiling3);
         AddChild(ceiling3);
 
-        Brick ceiling4 = new Brick(new Vec2(4900, 500), 400, 50, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        Brick ceiling4 = new Brick(new Vec2(4900, 500), 400, 50, "images/stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
         physicsManager.AddPhysicsBody(ceiling4);
         AddChild(ceiling4);
 
-        Brick ceiling5 = new Brick(new Vec2(3700, 50), 280, 50, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 35);
+        Brick ceiling5 = new Brick(new Vec2(3700, 50), 280, 50, "images/stoneplatform.png", isSolid: true, mass: 0, startRotation: 35);
         physicsManager.AddPhysicsBody(ceiling5);
         AddChild(ceiling5);
         #endregion
 
         #region floors
-        Brick LeftWall = new Brick(new Vec2(-1250, 390), 600, 100, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        Brick LeftWall = new Brick(new Vec2(-1250, 390), 600, 100, "images/stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
         physicsManager.AddPhysicsBody(LeftWall);
         AddChild(LeftWall);
 
-        Brick floor00 = new Brick(new Vec2(-900, 690), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick floor00 = new Brick(new Vec2(-900, 690), 600, 200, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor00);
         AddChild(floor00);
 
-        Brick floor0 = new Brick(new Vec2(-300, 690), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick floor0 = new Brick(new Vec2(-300, 690), 600, 200, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor0);
         AddChild(floor0);
 
-        Brick floor = new Brick(new Vec2(165, 540), 600, 100, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick floor = new Brick(new Vec2(165, 540), 600, 100, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor);
         AddChild(floor);
 
-        Brick floor2 = new Brick(new Vec2(1160, 525), 500, 70, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick floor2 = new Brick(new Vec2(1160, 525), 500, 70, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor2);
         AddChild(floor2);
 
-        Brick floor3 = new Brick(new Vec2(1750, 525), 500, 70, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick floor3 = new Brick(new Vec2(1750, 525), 500, 70, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor3);
         AddChild(floor3);
 
-        Brick floor4 = new Brick(new Vec2(2250, 525), 500, 70, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick floor4 = new Brick(new Vec2(2250, 525), 500, 70, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor4);
         AddChild(floor4);
 
-        Brick floor5 = new Brick(new Vec2(3200, 525), 500, 70, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick floor5 = new Brick(new Vec2(3200, 525), 500, 70, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor5);
         AddChild(floor5);
 
-        Brick floor6 = new Brick(new Vec2(3700, 525), 500, 70, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick floor6 = new Brick(new Vec2(3700, 525), 500, 70, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor6);
         AddChild(floor6);
 
-        Brick floor7 = new Brick(new Vec2(4050, 605), 300, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 35);
+        Brick floor7 = new Brick(new Vec2(4050, 605), 300, 70, "images/stoneplatform.png", isSolid: true, mass: 0, startRotation: 35);
         physicsManager.AddPhysicsBody(floor7);
         AddChild(floor7);
 
-        Brick floor8 = new Brick(new Vec2(4530, 685), 700, 70, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick floor8 = new Brick(new Vec2(4530, 685), 700, 70, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor8);
         AddChild(floor8);
         #endregion
 
         #region puzzle1
-        Brick tipOver = new Brick(new Vec2(250, 430), 120, 120, "blocksketch.png", isSolid: true, mass: 0);
+        Brick tipOver = new Brick(new Vec2(250, 430), 120, 120, "images/blocksketch.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(tipOver);
         AddChild(tipOver);
 
-        Brick holeLeft = new Brick(new Vec2(430, 690), 200, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        Brick holeLeft = new Brick(new Vec2(430, 690), 200, 70, "images/stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
         physicsManager.AddPhysicsBody(holeLeft);
         AddChild(holeLeft);
 
-        Brick holeRight = new Brick(new Vec2(950, 675), 230, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        Brick holeRight = new Brick(new Vec2(950, 675), 230, 70, "images/stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
         physicsManager.AddPhysicsBody(holeRight);
         AddChild(holeRight);
 
-        Brick holeBottom = new Brick(new Vec2(690, 755), 450, 70, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick holeBottom = new Brick(new Vec2(690, 755), 450, 70, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(holeBottom);
         AddChild(holeBottom);
 
-        Brick danglingBlock = new Brick(new Vec2(400, 275), 430, 130, "plank_withered.png", startRotation: 90);
+        Brick danglingBlock = new Brick(new Vec2(400, 275), 430, 130, "images/plank_withered.png", startRotation: 90);
         physicsManager.AddPhysicsBody(danglingBlock);
         AddChild(danglingBlock);
         #endregion
 
         #region puzzle2
-        Brick holeLeft2 = new Brick(new Vec2(1375, 685), 250, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        Brick holeLeft2 = new Brick(new Vec2(1375, 685), 250, 70, "images/stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
         physicsManager.AddPhysicsBody(holeLeft2);
         AddChild(holeLeft2);
 
-        Brick holeRight2 = new Brick(new Vec2(1535, 685), 250, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        Brick holeRight2 = new Brick(new Vec2(1535, 685), 250, 70, "images/stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
         physicsManager.AddPhysicsBody(holeRight2);
         AddChild(holeRight2);
 
-        Brick holeBottom2 = new Brick(new Vec2(1455, 820), 230, 30, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick holeBottom2 = new Brick(new Vec2(1455, 820), 230, 30, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(holeBottom2);
         AddChild(holeBottom2);
 
-        Brick danglingBlock2 = new Brick(new Vec2(1460, 330), 315, 65, "plank_withered.png", startRotation: 90);
+        Brick danglingBlock2 = new Brick(new Vec2(1460, 330), 315, 65, "images/plank_withered.png", startRotation: 90);
         physicsManager.AddPhysicsBody(danglingBlock2);
         AddChild(danglingBlock2);
 
@@ -392,29 +382,29 @@ public class MyGame : Game
 
         rope.AddConnection(new Connection(rope.points[rope.points.Count - 1], danglingBlock2.points[0], rope));
 
-        Brick wallRight0 = new Brick(new Vec2(2100, 125), 280, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        Brick wallRight0 = new Brick(new Vec2(2100, 125), 280, 70, "images/stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
         physicsManager.AddPhysicsBody(wallRight0);
         AddChild(wallRight0);
         #endregion
 
         #region puzzle3
-        Brick holeLeft3 = new Brick(new Vec2(2465, 675), 230, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        Brick holeLeft3 = new Brick(new Vec2(2465, 675), 230, 70, "images/stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
         physicsManager.AddPhysicsBody(holeLeft3);
         AddChild(holeLeft3);
 
-        Brick holeRight3 = new Brick(new Vec2(2985, 675), 230, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        Brick holeRight3 = new Brick(new Vec2(2985, 675), 230, 70, "images/stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
         physicsManager.AddPhysicsBody(holeRight3);
         AddChild(holeRight3);
 
-        Brick holeBottom3 = new Brick(new Vec2(2725, 755), 450, 70, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick holeBottom3 = new Brick(new Vec2(2725, 755), 450, 70, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(holeBottom3);
         AddChild(holeBottom3);
 
-        Brick wallRight = new Brick(new Vec2(3285, 125), 280, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        Brick wallRight = new Brick(new Vec2(3285, 125), 280, 70, "images/stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
         physicsManager.AddPhysicsBody(wallRight);
         AddChild(wallRight);
 
-        Brick danglingBlock3 = new Brick(new Vec2(2760, 290), 200, 200, "blocksketch.png", startRotation: 90);
+        Brick danglingBlock3 = new Brick(new Vec2(2760, 290), 200, 200, "images/blocksketch.png", startRotation: 90);
         physicsManager.AddPhysicsBody(danglingBlock3);
         AddChild(danglingBlock3);
 
@@ -424,7 +414,7 @@ public class MyGame : Game
 
         rope2.AddConnection(new Connection(rope2.points[rope2.points.Count - 1], danglingBlock3.points[0], rope2));
 
-        Brick danglingBlock4 = new Brick(new Vec2(3000, 200), 400, 100, "plank_withered.png", startRotation: 90);
+        Brick danglingBlock4 = new Brick(new Vec2(3000, 200), 400, 100, "images/plank_withered.png", startRotation: 90);
         physicsManager.AddPhysicsBody(danglingBlock4);
         AddChild(danglingBlock4);
         #endregion
@@ -443,7 +433,7 @@ public class MyGame : Game
 
     private void ParallaxTest()
     {
-        Brick floor = new Brick(new Vec2(8000, 1000), 20000, 300, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick floor = new Brick(new Vec2(8000, 1000), 20000, 300, "images/stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor);
         AddChild(floor);
     }

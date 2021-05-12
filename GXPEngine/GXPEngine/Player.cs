@@ -37,7 +37,7 @@ namespace GXPEngine
         private Sound SFXRunning = new Sound("sounds/updated run.wav", true);
         private SoundChannel SFXChannel;
 
-        public Vec2 currentCheckpoint = new Vec2(2200, 370);
+        public Vec2 currentCheckpoint = new Vec2(-1100, 200);
         //-1100, 200
         //Gets and sets the center of the player
         public Vec2 position
@@ -63,7 +63,7 @@ namespace GXPEngine
         {
             myGame = ((MyGame)game);
             spawnPosition = currentCheckpoint;
-            _graphics = new AnimationSprite("complete_sprisheet_kasaX.png", 4, 8);
+            _graphics = new AnimationSprite("images/complete_sprisheet_kasaX.png", 4, 8);
             _graphics.SetOrigin(0, 0);
             AddChild(_graphics);
 
@@ -236,7 +236,7 @@ namespace GXPEngine
 
             for (int i = 0; i < 100; i++)
             {
-                Sprite newDot = new Sprite("Dot.png", false, false);
+                Sprite newDot = new Sprite("images/Dot.png", false, false);
                 newDot.SetOrigin(newDot.width / 2f, newDot.height / 2f);
                 newDot.width = 5;
                 newDot.height = 5;

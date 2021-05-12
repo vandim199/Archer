@@ -28,7 +28,7 @@ namespace GXPEngine
             _velocity = startingVelocity;
             _myGame = myGame;
 
-            _arrowGraphics = new Sprite("Arrow.png", addCollider: false);
+            _arrowGraphics = new Sprite("images/Arrow.png", addCollider: false);
             _arrowGraphics.SetOrigin(_arrowGraphics.width, _arrowGraphics.height / 2f);
             _arrowGraphics.SetXY(_position.x, _position.y);
             _arrowGraphics.rotation = _velocity.GetAngleDegrees();

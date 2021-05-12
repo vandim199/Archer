@@ -11,7 +11,7 @@ namespace GXPEngine
         public Vec2 min, max;
         MyGame myGame;
 
-        public Box():base("barry.png")
+        public Box():base("images/barry.png")
         {
             myGame = ((MyGame)game);
             myGame.AddChild(this);

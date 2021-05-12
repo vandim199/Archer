@@ -7,7 +7,7 @@ namespace GXPEngine
 {
     public class Checkpoint : AnimationSprite
     {
-        public Checkpoint(Vec2 pos) : base("checkpointstatue.png", 2, 1)
+        public Checkpoint(Vec2 pos) : base("images/checkpointstatue.png", 2, 1)
         {
             SetXY(pos.x, pos.y);
             scale = 0.3f;
