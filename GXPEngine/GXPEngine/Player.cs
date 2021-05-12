@@ -34,7 +34,7 @@ namespace GXPEngine
 
         private bool isRunning = false;
 
-        private Sound SFXRunning = new Sound("sounds/updated run.wav", true, false);
+        private Sound SFXRunning = new Sound("sounds/updated run.wav", true);
         private SoundChannel SFXChannel;
 
         public Vec2 currentCheckpoint = new Vec2(2200, 370);
@@ -169,6 +169,7 @@ namespace GXPEngine
             if ((Input.GetKeyDown(Key.W) || Input.GetKeyDown(Key.SPACE)) && grounded)
             {
                 movement += new Vec2(0, -jumpSpeed);
+                movement.y -= (center - oldCenter).y;
             }
 
             foreach (Point point in points)

@@ -25,6 +25,8 @@ public class MyGame : Game
 
     public Sound soundLanding = new Sound("sounds/landing.mp3");
     public Sound soundArrow = new Sound("sounds/arrow swoosh.wav");
+    private Sound _SFXAmbience = new Sound("sounds/ambience 1.mp3", looping:true);
+    private Sound _bgm = new Sound("sounds/bgm.mp3", looping: true);
     Sprite skybox;
     Sprite skybox2;
     Sprite waterfall;
@@ -37,6 +39,8 @@ public class MyGame : Game
     public MyGame() : base(1920, 1080, false)       // Create a window that's 800x600 and NOT fullscreen
     {
         LoadMenu();
+        _SFXAmbience.Play(volume:3);
+        _bgm.Play(volume:0.2f);
     }
 
     void Update()
@@ -360,7 +364,7 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(holeBottom);
         AddChild(holeBottom);
 
-        Brick danglingBlock = new Brick(new Vec2(400, 200), 430, 130, "plank_withered.png", startRotation: 90);
+        Brick danglingBlock = new Brick(new Vec2(400, 275), 430, 130, "plank_withered.png", startRotation: 90);
         physicsManager.AddPhysicsBody(danglingBlock);
         AddChild(danglingBlock);
         #endregion
@@ -382,7 +386,7 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(danglingBlock2);
         AddChild(danglingBlock2);
 
-        Rope rope = new Rope(new Vec2(1435, -5), danglingBlock2.points[0].position, segmentLength: 50);
+        Rope rope = new Rope(new Vec2(1435, -50), danglingBlock2.points[0].position, segmentLength: 50);
         physicsManager.AddPhysicsBody(rope);
         AddChild(rope);
 
@@ -414,7 +418,7 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(danglingBlock3);
         AddChild(danglingBlock3);
 
-        Rope rope2 = new Rope(new Vec2(2735, -5), danglingBlock3.points[0].position, segmentLength: 50);
+        Rope rope2 = new Rope(new Vec2(2735, -50), danglingBlock3.points[0].position, segmentLength: 50);
         physicsManager.AddPhysicsBody(rope2);
         AddChild(rope2);
 
