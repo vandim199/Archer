@@ -39,6 +39,9 @@ public class PhysicsBody : GameObject
         }
     }
 
+    public Vec2 oldVelocity;
+    public Vec2 velocity;
+
     public float mass;
     public bool isRope;
     public bool isPlayer;

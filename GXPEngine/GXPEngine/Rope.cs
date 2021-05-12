@@ -11,7 +11,7 @@ namespace GXPEngine
         private Vec2 _startPosition;
         private int _segmentLength;
 
-        public Rope(Vec2 startPosition, Vec2 endPosition, int segmentLength = 5): base(1, false, true, true, false, false)
+        public Rope(Vec2 startPosition, Vec2 endPosition, int segmentLength = 5) : base(1, false, true, true, false, false)
         {
             _startPosition = startPosition;
             _segmentLength = segmentLength;
@@ -42,20 +42,23 @@ namespace GXPEngine
 
         public void Break(Connection connection)
         {
-            for(int i = connections.Count - 1; i >= 0; i--)
+            for (int i = connections.Count - 1; i >= 0; i--)
             {
-                if(connections[i] != connection)
-                {
-                    connections[i].LateDestroy();
-                    connections.RemoveAt(i);
+                bool shouldReturn = false;
 
-                    points[i].LateDestroy();
-                    points.RemoveAt(i);
-                }
-                else
+                if (connections[i] == connection)
                 {
-                    return;
+                    shouldReturn = true;
                 }
+
+                connections[i].LateDestroy();
+                connections.RemoveAt(i);
+
+                points[i].LateDestroy();
+                points.RemoveAt(i);
+
+                if (shouldReturn)
+                    return;
             }
         }
     }

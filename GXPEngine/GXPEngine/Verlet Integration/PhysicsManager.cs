@@ -12,6 +12,8 @@ public class PhysicsManager : GameObject
     private VerletCollisionInfo _collisionInfo;
 
     private static Sound SFXPlayerLanding = new Sound("sounds/short landing.wav");
+    private static Sound SFXBlockLanding = new Sound("sounds/big rock falls.wav");
+    private static Sound SFXLogFalling = new Sound("sounds/log falling.wav");
 
     public PhysicsManager(MyGame myGame)
     {
@@ -56,6 +58,8 @@ public class PhysicsManager : GameObject
                         }
                     }
                 }
+
+                pb.velocity = (pb.center - pb.oldCenter);
             }
         }
     }
@@ -75,6 +79,8 @@ public class PhysicsManager : GameObject
     {
         foreach (PhysicsBody pb in physicsBodies)
         {
+            pb.oldVelocity = (pb.center - pb.oldCenter);
+
             for (int i = 0; i < pb.points.Count; i++)
             {
                 Point p = pb.points[i];
@@ -246,6 +252,39 @@ public class PhysicsManager : GameObject
             colInfo.p.position += new Vec2((colInfo.p.oldPosition.x - colInfo.p.position.x) * 0.1f, 0);
         }
 
+        if (colInfo.c.physicsParent is Brick brick1)
+        {
+            bool position1Movement = (colInfo.c.point1.position.y - colInfo.c.point1.position.y) > 2;
+            bool position2Movement = (colInfo.c.point2.position.y - colInfo.c.point2.position.y) > 2;
+            if ((position1Movement || position2Movement) &&
+                ((colInfo.normal.GetAngleDegrees() > 70 && colInfo.normal.GetAngleDegrees() < 110)
+                || (colInfo.normal.GetAngleDegrees() < -70 && colInfo.normal.GetAngleDegrees() > -110)))
+            {
+                if (brick1.graphicsImage == "plank_withered.png")
+                {
+                    SFXLogFalling.Play();
+                }
+                else
+                {
+                    SFXBlockLanding.Play(volume: 0.1f);
+                }
+            }
+        }
+        if (colInfo.p.physicsParent is Brick brick2)
+        {
+            if (colInfo.p.position.y - colInfo.p.oldPosition.y > 2 && colInfo.normal.GetAngleDegrees() != -180 && colInfo.normal.GetAngleDegrees() != 180)
+            {
+                if (brick2.graphicsImage == "plank_withered.png")
+                {
+                    SFXLogFalling.Play();
+                }
+                else
+                {
+                    SFXBlockLanding.Play(volume: 0.1f);
+                }
+            }
+        }
+
         colInfo.c.physicsParent.OnCollided(colInfo.c, colInfo.p);
 
 
@@ -272,7 +311,7 @@ public class PhysicsManager : GameObject
                 if (colInfo.p.y > colInfo.p.physicsParent.center.y + 20)
                 {
                     player.grounded = true;
-                    if(player.velocity.y > 7)
+                    if (player.velocity.y > 7)
                     {
                         SFXPlayerLanding.Play();
                     }

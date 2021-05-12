@@ -7,7 +7,8 @@ namespace GXPEngine
 {
     class Brick : PhysicsBody
     {
-        private Sprite _graphics;
+        public Sprite graphics { get; private set; }
+        public string graphicsImage;
         /// <summary>
         /// Creates a Verlet physics brick with 4 corners based on the give parameters. (Corners are created from the top left, clockwise to the bottom left)
         /// </summary>
@@ -21,11 +22,12 @@ namespace GXPEngine
         {
             CreateBody(spawnPosition, newWidth, newHeight, startRotation, isSolid);
 
-            _graphics = new Sprite(sprite, addCollider: false);
-            _graphics.SetOrigin(0, 0);
-            _graphics.width = newWidth;
-            _graphics.height = newHeight;
-            AddChild(_graphics);
+            graphics = new Sprite(sprite, addCollider: false);
+            graphics.SetOrigin(0, 0);
+            graphics.width = newWidth;
+            graphics.height = newHeight;
+            AddChild(graphics);
+            graphicsImage = sprite;
 
             if (sprite == "plank_withered.png") bounceArrow = false;
             else bounceArrow = true;
@@ -33,10 +35,10 @@ namespace GXPEngine
 
         void Update()
         {
-            _graphics.x = points[0].position.x;
-            _graphics.y = points[0].position.y;
+            graphics.x = points[0].position.x;
+            graphics.y = points[0].position.y;
 
-            _graphics.rotation = (points[1].position - points[0].position).GetAngleDegrees();
+            graphics.rotation = (points[1].position - points[0].position).GetAngleDegrees();
         }
 
         private void CreateBody(Vec2 spawnPosition, int newWidth, int newHeight, int startRotation, bool isSolid)
