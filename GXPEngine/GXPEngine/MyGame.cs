@@ -27,8 +27,12 @@ public class MyGame : Game
     public Sound soundArrow = new Sound("sounds/arrow swoosh.wav");
     Sprite skybox;
     Sprite skybox2;
+    Sprite waterfall;
+    Sprite waterfall2;
     Sprite background;
     Sprite logo;
+
+    Sprite tips;
 
     public MyGame() : base(1920, 1080, false)       // Create a window that's 800x600 and NOT fullscreen
     {
@@ -65,19 +69,30 @@ public class MyGame : Game
             float offset = (player.position.x / skybox.width) * 0.15f;
             offset = Mathf.Ceiling(offset - 1);
 
+            float offset2 = (player.position.x / waterfall.width) * 0.25f;
+            offset2 = Mathf.Ceiling(offset2 - 1);
+
             cam.x = player.center.x;
             cam.y = player.center.y;
             camPosition = new Vec2(cam.x, cam.y);
 
             skybox.x = offset * skybox.width + cam.x * 0.85f;
             skybox2.x = skybox.x + skybox.width;
+
+            waterfall.x = offset2 * waterfall.width + cam.x * 0.75f - 120;
+            waterfall2.x = waterfall.x + waterfall.width;
+
+            if (player.position.y > 600)
+            {
+                tips.visible = true;
+            }
+            else tips.visible = false;
+
             if (Input.GetKeyDown(Key.ENTER))
             {
                 //paused = true;
                 LoadMenu();
             }
-
-
             if (Input.GetKey(Key.ZERO) && cam.scale >= 0.6f)
             {
                 cam.scale -= 0.2f;
@@ -142,14 +157,16 @@ public class MyGame : Game
     void LoadGame()
     {
         physicsManager = new PhysicsManager(this);
-
+        
         player = new Player(new Vec2(-1000, 400));
         physicsManager.AddPhysicsBody(player);
-        AddChild(player);
-
+        
         cam = new Camera(0, 0, width, height);
         cam.scale = 1f;
         player.AddChild(cam);
+
+        tips = new Sprite("Reset.png");
+        tips.SetOrigin(width / 2, height / 2);
 
         skybox = new Sprite("columns.png");
         skybox.SetOrigin(skybox.width / 2, skybox.height / 2);
@@ -163,16 +180,31 @@ public class MyGame : Game
         skybox2.scale = 0.7f;
         AddChild(skybox2);
 
+        waterfall = new Sprite("waterfallsketch.png");
+        waterfall.SetOrigin(waterfall.width / 2, waterfall.height / 2);
+        waterfall.y = height / 2.5f;
+        waterfall.scale = 0.8f;
+        AddChild(waterfall);
+
+        waterfall2 = new Sprite("waterfallsketch.png");
+        waterfall2.SetOrigin(waterfall2.width / 2, waterfall2.height / 2);
+        waterfall2.y = height / 2.5f;
+        waterfall2.scale = 0.8f;
+        AddChild(waterfall2);
+
         //skybox.alpha = 0;
         //skybox2.alpha = 0;
 
-        Sprite overlay = new Sprite("Layout3.png");
+        Sprite overlay = new Sprite("Layout33.png");
         overlay.SetXY(-1320-830, -325);
         //overlay.scale = 1.867f;
         //AddChild(overlay);
 
-        SetChildIndex(skybox, -1);
-        SetChildIndex(skybox2, -2);
+        SetChildIndex(skybox, 1);
+        SetChildIndex(skybox2, 0);
+
+        //SetChildIndex(waterfall, 2);
+        //SetChildIndex(waterfall2, 3);
         //SetChildIndex(overlay, 100000);
 
         //==== PHYSICS TESTS ====
@@ -182,7 +214,9 @@ public class MyGame : Game
         //ParallaxTest();
         //=======================
 
+        AddChild(player);
         AddChild(overlay);
+        cam.AddChild(tips);
 
         foreach (LineSegment line in lines) AddChild(line);
         foreach (Ball ball in balls) AddChild(ball);
@@ -242,33 +276,25 @@ public class MyGame : Game
         physicsManager.AddPhysicsBody(ceiling);
         AddChild(ceiling);
 
-        Brick ceiling1 = new Brick(new Vec2(-300, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick ceiling1 = new Brick(new Vec2(1500, -100), 4200, 200, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(ceiling1);
         AddChild(ceiling1);
-
-        Brick ceiling2 = new Brick(new Vec2(300, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
+        
+        Brick ceiling2 = new Brick(new Vec2(4200, 100), 800, 100, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(ceiling2);
         AddChild(ceiling2);
 
-        Brick ceiling3 = new Brick(new Vec2(900, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick ceiling3 = new Brick(new Vec2(4750, 230), 400, 50, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 35);
         physicsManager.AddPhysicsBody(ceiling3);
         AddChild(ceiling3);
 
-        Brick ceiling4 = new Brick(new Vec2(1500, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick ceiling4 = new Brick(new Vec2(4900, 500), 400, 50, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
         physicsManager.AddPhysicsBody(ceiling4);
         AddChild(ceiling4);
 
-        Brick ceiling5 = new Brick(new Vec2(2100, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick ceiling5 = new Brick(new Vec2(3700, 50), 280, 50, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 35);
         physicsManager.AddPhysicsBody(ceiling5);
         AddChild(ceiling5);
-
-        Brick ceiling6 = new Brick(new Vec2(2700, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
-        physicsManager.AddPhysicsBody(ceiling6);
-        AddChild(ceiling6);
-
-        Brick ceiling7 = new Brick(new Vec2(3300, -100), 600, 200, "stoneplatform.png", isSolid: true, mass: 0);
-        physicsManager.AddPhysicsBody(ceiling7);
-        AddChild(ceiling7);
         #endregion
 
         #region floors
@@ -303,6 +329,18 @@ public class MyGame : Game
         Brick floor5 = new Brick(new Vec2(3200, 525), 500, 70, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor5);
         AddChild(floor5);
+
+        Brick floor6 = new Brick(new Vec2(3700, 525), 500, 70, "stoneplatform.png", isSolid: true, mass: 0);
+        physicsManager.AddPhysicsBody(floor6);
+        AddChild(floor6);
+
+        Brick floor7 = new Brick(new Vec2(4050, 605), 300, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 35);
+        physicsManager.AddPhysicsBody(floor7);
+        AddChild(floor7);
+
+        Brick floor8 = new Brick(new Vec2(4530, 685), 700, 70, "stoneplatform.png", isSolid: true, mass: 0);
+        physicsManager.AddPhysicsBody(floor8);
+        AddChild(floor8);
         #endregion
 
         #region puzzle1
@@ -349,6 +387,10 @@ public class MyGame : Game
         AddChild(rope);
 
         rope.AddConnection(new Connection(rope.points[rope.points.Count - 1], danglingBlock2.points[0], rope));
+
+        Brick wallRight0 = new Brick(new Vec2(2100, 125), 280, 70, "stoneplatform.png", isSolid: true, mass: 0, startRotation: 90);
+        physicsManager.AddPhysicsBody(wallRight0);
+        AddChild(wallRight0);
         #endregion
 
         #region puzzle3
@@ -397,7 +439,7 @@ public class MyGame : Game
 
     private void ParallaxTest()
     {
-        Brick floor = new Brick(new Vec2(10000, 1000), 20000, 300, "stoneplatform.png", isSolid: true, mass: 0);
+        Brick floor = new Brick(new Vec2(8000, 1000), 20000, 300, "stoneplatform.png", isSolid: true, mass: 0);
         physicsManager.AddPhysicsBody(floor);
         AddChild(floor);
     }

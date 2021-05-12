@@ -37,7 +37,7 @@ namespace GXPEngine
         private Sound SFXRunning = new Sound("sounds/updated run.wav", true, false);
         private SoundChannel SFXChannel;
 
-        public Vec2 currentCheckpoint = new Vec2(-1100, 200);
+        public Vec2 currentCheckpoint = new Vec2(2200, 370);
         //-1100, 200
         //Gets and sets the center of the player
         public Vec2 position
